@@ -12,9 +12,20 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var navigationBarIzgled = UINavigationBar.appearance()
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.makeKeyAndVisible()
+        window?.rootViewController = UINavigationController(rootViewController: VijestiController())
+        navigationBarIzgled.tintColor = UIColor.white
+        navigationBarIzgled.barTintColor = UIColor.blue
+        navigationBarIzgled.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+       
+        //UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
+        
         // Override point for customization after application launch.
         return true
     }
