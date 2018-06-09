@@ -9,9 +9,8 @@
 import UIKit
 
 class VijestiController: UITableViewController {
-    
-    var stranica: Stranica?
-    var clanci: [Clanak]?
+
+    var clanci: [Clanak] = []
     let url = URL(string: "https://newsapi.org/v1/articles?apiKey=6946d0c07a1c4555a4186bfcade76398&sortBy=top&source=bbc-news")
     
     let cellID = "CellID"
@@ -20,7 +19,7 @@ class VijestiController: UITableViewController {
         super.viewDidLoad()
         
         navigationItem.title = "Factory"
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
+        tableView.register(VijestTableViewCell.self, forCellReuseIdentifier: cellID)
        
         getData()
         
@@ -29,17 +28,33 @@ class VijestiController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 11
+        return clanci.count
     }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellID) as? VijestTableViewCell else {
             return UITableViewCell()
         }
-        cell.vijestNaslov.text = clanci![indexPath.item].title
-        cell.vijestOpis.text = clanci![indexPath.item].description
+//        cell.vijestSlika.image = clanci[indexPath.row].urlToImage
+        cell.vijestNaslov.text = clanci[indexPath.row].title
+        cell.vijestOpis.text = clanci[indexPath.row].description
+        
+        if let imageURL = URL(string: clanci[indexPath.row].urlToImage) {
+            DispatchQueue.global().async {
+                let data = try? Data(contentsOf: imageURL)
+                if let data = data {
+                    let image = UIImage(data: data)
+                    DispatchQueue.main.async {
+                        cell.vijestSlika.image = image
+                    }
+                }
+            }
+        }
+        
         
         return cell
     }
+    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }

@@ -10,20 +10,22 @@ import UIKit
 
 class VijestTableViewCell: UITableViewCell {
     
-    var clanci: [Clanak]!
-    
     var vijestSlika: UIImageView = {
         let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+//        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
     var vijestNaslov: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     var vijestOpis: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
@@ -47,20 +49,26 @@ class VijestTableViewCell: UITableViewCell {
     }
     
     override func layoutSubviews() {
-        vijestSlika.frame = CGRect (x:0, y:0, width: 80, height: 80)
-        vijestSlika.contentMode = .scaleAspectFill
-//        vijestSlika = Clanak.image
+//       vijestSlika.frame = CGRect (x:0, y:0, width: 80, height: 80)
         self.contentView.addSubview(vijestSlika)
+        vijestSlika.leftAnchor.constraint(equalTo: self.contentView.leftAnchor).isActive = true
+        vijestSlika.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        vijestSlika.heightAnchor.constraint(equalToConstant: 80).isActive = true
+       
         
-        vijestNaslov.frame = CGRect(x: vijestSlika.frame.maxX + 8, y: vijestSlika.frame.height / 2 + 2, width: self.contentView.frame.width - 5 - vijestSlika.frame.width - 10 - 10, height: 30)
-        
-        vijestOpis.text = "\(clanci.description)"
+//        vijestNaslov.frame = CGRect(x: vijestSlika.frame.maxX + 8, y: vijestSlika.frame.height / 2 + 2, width: self.contentView.frame.width - 5 - vijestSlika.frame.width - 10 - 10, height: 30)
         self.contentView.addSubview(vijestNaslov)
+        vijestNaslov.leftAnchor.constraint(equalTo: vijestSlika.rightAnchor, constant: 8).isActive = true
+        vijestNaslov.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: 8).isActive = true
+        vijestNaslov.centerYAnchor.constraint(equalTo: vijestSlika.centerYAnchor, constant: 8).isActive = true
         
-        vijestOpis.frame = CGRect(x: vijestSlika.frame.maxX + 8, y: vijestNaslov.frame.maxY, width: self.contentView.frame.width - 5 - vijestSlika.frame.width - 10 - 10, height: 30)
-        vijestOpis.text = "\(clanci.description)"
+        
+//        vijestOpis.frame = CGRect(x: vijestSlika.frame.maxX + 8, y: vijestNaslov.frame.maxY, width: self.contentView.frame.width - 5 - vijestSlika.frame.width - 10 - 10, height: 30)
         self.contentView.addSubview(vijestOpis)
-        
+        vijestOpis.leftAnchor.constraint(equalTo: vijestSlika.rightAnchor, constant: 8).isActive = true
+        vijestOpis.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 8).isActive = true
+        vijestOpis.centerYAnchor.constraint(equalTo: vijestSlika.centerYAnchor, constant: -8).isActive = true
+       
 
     }
     
