@@ -58,6 +58,13 @@ class VijestiController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detaljniViewController = DetaljniPrikazViewController  ()
+        detaljniViewController.vijestTekst.text = clanci[indexPath.row].url
+        detaljniViewController.naslov.text = clanci[indexPath.row].title
+        navigationController?.pushViewController(detaljniViewController, animated: true)
+        
+    }
     
     func getData() {
         guard let downloadURL = url else { return }

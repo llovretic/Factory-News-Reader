@@ -13,6 +13,7 @@
 		475F883B20CA67F000A48C8C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 475F883A20CA67F000A48C8C /* Assets.xcassets */; };
 		475F883E20CA67F000A48C8C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 475F883C20CA67F000A48C8C /* LaunchScreen.storyboard */; };
 		475F884620CA7C4300A48C8C /* VijestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475F884520CA7C4300A48C8C /* VijestTableViewCell.swift */; };
+		476AD2DC20CC281E0023FA6B /* DetaljniPrikazViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476AD2DB20CC281E0023FA6B /* DetaljniPrikazViewController.swift */; };
 		47C18E6120CACFAB004327AD /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C18E6020CACFAB004327AD /* Model.swift */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +26,7 @@
 		475F883D20CA67F000A48C8C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		475F883F20CA67F000A48C8C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		475F884520CA7C4300A48C8C /* VijestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VijestTableViewCell.swift; sourceTree = "<group>"; };
+		476AD2DB20CC281E0023FA6B /* DetaljniPrikazViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetaljniPrikazViewController.swift; sourceTree = "<group>"; };
 		47C18E6020CACFAB004327AD /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,6 +64,7 @@
 				475F883320CA67F000A48C8C /* AppDelegate.swift */,
 				475F883520CA67F000A48C8C /* VijestiController.swift */,
 				475F884520CA7C4300A48C8C /* VijestTableViewCell.swift */,
+				476AD2DB20CC281E0023FA6B /* DetaljniPrikazViewController.swift */,
 				475F883720CA67F000A48C8C /* Main.storyboard */,
 				475F883A20CA67F000A48C8C /* Assets.xcassets */,
 				475F883C20CA67F000A48C8C /* LaunchScreen.storyboard */,
@@ -142,6 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				476AD2DC20CC281E0023FA6B /* DetaljniPrikazViewController.swift in Sources */,
 				475F883620CA67F000A48C8C /* VijestiController.swift in Sources */,
 				475F883420CA67F000A48C8C /* AppDelegate.swift in Sources */,
 				475F884620CA7C4300A48C8C /* VijestTableViewCell.swift in Sources */,
