@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class VijestiController: UITableViewController {
 
     var clanci: [Clanak] = []
@@ -58,10 +59,14 @@ class VijestiController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detaljniViewController = DetaljniPrikazViewController  ()
-        detaljniViewController.vijestTekst.text = clanci[indexPath.row].url
-        detaljniViewController.naslov.text = clanci[indexPath.row].title
+        let podaci = clanci[indexPath.row]
+        detaljniViewController.podaci = podaci
+//        detaljniViewController.vijestTekst.text = clanci[indexPath.row].url
+//        detaljniViewController.naslov.text = clanci[indexPath.row].title
+//        detaljniViewController.podaci = clanci
         navigationController?.pushViewController(detaljniViewController, animated: true)
         
     }
@@ -73,7 +78,6 @@ class VijestiController: UITableViewController {
                 print("something is wrong")
                 return
             }
-            print("downloaded")
             do
             {
                 let decoder = JSONDecoder()
@@ -81,7 +85,6 @@ class VijestiController: UITableViewController {
                 self.clanci = podaci.articles
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
-                    print(self.clanci)
                 }
             } catch {
                 print("something wrong after downloaded")

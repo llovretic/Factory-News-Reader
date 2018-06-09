@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class VijestTableViewCell: UITableViewCell {
     
     var vijestSlika: UIImageView = {
@@ -57,12 +58,12 @@ class VijestTableViewCell: UITableViewCell {
         self.contentView.addSubview(vijestNaslov)
         vijestNaslov.leftAnchor.constraint(equalTo: vijestSlika.rightAnchor, constant: 8).isActive = true
         vijestNaslov.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: 8).isActive = true
-        vijestNaslov.centerYAnchor.constraint(equalTo: vijestSlika.centerYAnchor, constant: 8).isActive = true
+        vijestNaslov.centerYAnchor.constraint(equalTo: vijestSlika.centerYAnchor, constant: -8).isActive = true
         
         self.contentView.addSubview(vijestOpis)
         vijestOpis.leftAnchor.constraint(equalTo: vijestSlika.rightAnchor, constant: 8).isActive = true
         vijestOpis.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 8).isActive = true
-        vijestOpis.centerYAnchor.constraint(equalTo: vijestSlika.centerYAnchor, constant: -8).isActive = true
+        vijestOpis.centerYAnchor.constraint(equalTo: vijestSlika.centerYAnchor, constant: 8).isActive = true
        
 
     }

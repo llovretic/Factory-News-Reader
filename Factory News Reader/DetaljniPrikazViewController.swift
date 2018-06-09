@@ -13,7 +13,7 @@ class DetaljniPrikazViewController: UIViewController {
     var slika: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        //        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
@@ -30,11 +30,13 @@ class DetaljniPrikazViewController: UIViewController {
         tekst.isScrollEnabled = true
         return tekst
     }()
+    
+    var podaci: Clanak!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubViews()
-        view.backgroundColor = UIColor.white
+//        view.backgroundColor = UIColor.white
         
         // Do any additional setup after loading the view.
     }
@@ -56,24 +58,41 @@ class DetaljniPrikazViewController: UIViewController {
     */
     
      func addSubViews() {
-        self.view.addSubview(slika)
+        
+        view.addSubview(slika)
+        if let imageURL = URL(string: podaci.urlToImage) {
+            DispatchQueue.global().async {
+                let data = try? Data(contentsOf: imageURL)
+                if let data = data {
+                    let image = UIImage(data: data)
+                    DispatchQueue.main.async {
+                        self.slika.image = image
+                    }
+                }
+            }
+        }
         slika.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         slika.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         slika.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
 //        slika.widthAnchor.constraint(equalToConstant: 80).isActive = true
-//        slika.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        slika.heightAnchor.constraint(equalToConstant: 350).isActive = true
         
-        
-        self.view.addSubview(naslov)
+        view.addSubview(naslov)
+        self.naslov.text = podaci.title
         naslov.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 8).isActive = true
         naslov.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 8).isActive = true
         naslov.topAnchor.constraint(equalTo: slika.bottomAnchor, constant: 8).isActive = true
         
-        
-        self.view.addSubview(vijestTekst)
+      
+        view.addSubview(vijestTekst)
+        self.vijestTekst.text = podaci.url
         vijestTekst.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 8).isActive = true
         vijestTekst.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 8).isActive = true
         vijestTekst.topAnchor.constraint(equalTo: naslov.bottomAnchor, constant: 8).isActive = true
+        
+        navigationItem.title = podaci.title
+        
+        
     
     }
     
