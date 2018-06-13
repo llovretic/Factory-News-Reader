@@ -15,13 +15,16 @@ class VijestiController: UITableViewController {
     let url = URL(string: "https://newsapi.org/v1/articles?apiKey=6946d0c07a1c4555a4186bfcade76398&sortBy=top&source=bbc-news")
     
     let cellID = "CellID"
+    
+    let loader = CAShapeLayer()
+    let shapeLayer = CAShapeLayer()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.title = "Factory"
         tableView.register(VijestTableViewCell.self, forCellReuseIdentifier: cellID)
-       
+        setUpLoader()
         getData()
         
         
@@ -64,9 +67,6 @@ class VijestiController: UITableViewController {
         let detaljniViewController = DetaljniPrikazViewController  ()
         let podaci = clanci[indexPath.row]
         detaljniViewController.podaci = podaci
-//        detaljniViewController.vijestTekst.text = clanci[indexPath.row].url
-//        detaljniViewController.naslov.text = clanci[indexPath.row].title
-//        detaljniViewController.podaci = clanci
         navigationController?.pushViewController(detaljniViewController, animated: true)
         
     }
@@ -75,7 +75,8 @@ class VijestiController: UITableViewController {
         guard let downloadURL = url else { return }
         URLSession.shared.dataTask(with: downloadURL) { data, urlResponse, error in
             guard let data = data, error == nil, urlResponse != nil else {
-                print("something is wrong")
+                Greska.alert(title:"Greška", message: "Ups, došlo je do pogreške prilikom prikupljanja podataka.", viewController: self)
+                self.getData()
                 return
             }
             do
@@ -84,13 +85,39 @@ class VijestiController: UITableViewController {
                 let podaci = try decoder.decode(Stranica.self, from: data)
                 self.clanci = podaci.articles
                 DispatchQueue.main.async {
+//                    self.shapeLayer.strokeEnd = 
                     self.tableView.reloadData()
                 }
             } catch {
-                print("something wrong after downloaded")
+                Greska.alert(title:"Greška", message: "Ups, došlo je do pogreške s podacima.", viewController: self)
+                self.getData()
             }
             }.resume()
     }
-
+    
+    func setUpLoader(){
+        let circularPath = UIBezierPath(arcCenter: .zero, radius: 100, startAngle: -CGFloat.pi / 2, endAngle: 2 * CGFloat.pi, clockwise: true)
+        loader.path = circularPath.cgPath
+        loader.strokeColor = UIColor.lightGray.cgColor
+        loader.lineWidth = 10
+        loader.fillColor = UIColor.clear.cgColor
+        loader.lineCap = kCALineCapRound
+        loader.position = view.center
+        view.layer.addSublayer(loader)
+        
+        shapeLayer.path = circularPath.cgPath
+        shapeLayer.strokeColor = UIColor.white.cgColor
+        shapeLayer.lineWidth = 10
+        shapeLayer.fillColor = UIColor.clear.cgColor
+        shapeLayer.lineCap = kCALineCapRound
+        shapeLayer.position = view.center
+        shapeLayer.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
+        shapeLayer.strokeEnd = 0
+        shapeLayer.position = view.center
+        view.layer.addSublayer(shapeLayer)
+    }
 }
+   
+
+
 
