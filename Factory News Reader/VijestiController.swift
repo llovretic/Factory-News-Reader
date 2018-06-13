@@ -16,15 +16,18 @@ class VijestiController: UITableViewController {
     
     let cellID = "CellID"
     
-    let loader = CAShapeLayer()
-    let shapeLayer = CAShapeLayer()
+    let indikator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
+    
+//    let loader = CAShapeLayer()
+//    let shapeLayer = CAShapeLayer()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.title = "Factory"
         tableView.register(VijestTableViewCell.self, forCellReuseIdentifier: cellID)
-        setUpLoader()
+        createActivityIndicator()
+//        setUpLoader()
         getData()
         
         
@@ -85,6 +88,7 @@ class VijestiController: UITableViewController {
                 let podaci = try decoder.decode(Stranica.self, from: data)
                 self.clanci = podaci.articles
                 DispatchQueue.main.async {
+                    self.indikator.stopAnimating()
 //                    self.shapeLayer.strokeEnd = 
                     self.tableView.reloadData()
                 }
@@ -95,27 +99,34 @@ class VijestiController: UITableViewController {
             }.resume()
     }
     
-    func setUpLoader(){
-        let circularPath = UIBezierPath(arcCenter: .zero, radius: 100, startAngle: -CGFloat.pi / 2, endAngle: 2 * CGFloat.pi, clockwise: true)
-        loader.path = circularPath.cgPath
-        loader.strokeColor = UIColor.lightGray.cgColor
-        loader.lineWidth = 10
-        loader.fillColor = UIColor.clear.cgColor
-        loader.lineCap = kCALineCapRound
-        loader.position = view.center
-        view.layer.addSublayer(loader)
-        
-        shapeLayer.path = circularPath.cgPath
-        shapeLayer.strokeColor = UIColor.white.cgColor
-        shapeLayer.lineWidth = 10
-        shapeLayer.fillColor = UIColor.clear.cgColor
-        shapeLayer.lineCap = kCALineCapRound
-        shapeLayer.position = view.center
-        shapeLayer.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
-        shapeLayer.strokeEnd = 0
-        shapeLayer.position = view.center
-        view.layer.addSublayer(shapeLayer)
-    }
+    func createActivityIndicator() {
+        indikator.center = view.center
+        indikator.color = UIColor.red
+        indikator.startAnimating()
+        view.addSubview(indikator)
+}
+    
+//    func setUpLoader(){
+//        let circularPath = UIBezierPath(arcCenter: .zero, radius: 100, startAngle: -CGFloat.pi / 2, endAngle: 2 * CGFloat.pi, clockwise: true)
+//        loader.path = circularPath.cgPath
+//        loader.strokeColor = UIColor.lightGray.cgColor
+//        loader.lineWidth = 10
+//        loader.fillColor = UIColor.clear.cgColor
+//        loader.lineCap = kCALineCapRound
+//        loader.position = view.center
+//        view.layer.addSublayer(loader)
+//
+//        shapeLayer.path = circularPath.cgPath
+//        shapeLayer.strokeColor = UIColor.white.cgColor
+//        shapeLayer.lineWidth = 10
+//        shapeLayer.fillColor = UIColor.clear.cgColor
+//        shapeLayer.lineCap = kCALineCapRound
+//        shapeLayer.position = view.center
+//        shapeLayer.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
+//        shapeLayer.strokeEnd = 0
+//        shapeLayer.position = view.center
+//        view.layer.addSublayer(shapeLayer)
+//    }
 }
    
 
