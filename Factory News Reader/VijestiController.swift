@@ -18,17 +18,21 @@ class VijestiController: UITableViewController {
     
     let indikator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
     
-//    let loader = CAShapeLayer()
-//    let shapeLayer = CAShapeLayer()
-
+    lazy var refresher: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.red
+        refreshControl.addTarget(self, action: #selector(getData), for: .valueChanged)
+        return refreshControl
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.title = "Factory"
         tableView.register(VijestTableViewCell.self, forCellReuseIdentifier: cellID)
         createActivityIndicator()
-//        setUpLoader()
         getData()
+        tableView.refreshControl = refresher
         
         
         // Do any additional setup after loading the view, typically from a nib.
@@ -42,7 +46,6 @@ class VijestiController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellID) as? VijestTableViewCell else {
             return UITableViewCell()
         }
-//        cell.vijestSlika.image = clanci[indexPath.row].urlToImage
         cell.vijestNaslov.text = clanci[indexPath.row].title
         cell.vijestOpis.text = clanci[indexPath.row].description
         
@@ -74,7 +77,7 @@ class VijestiController: UITableViewController {
         
     }
     
-    func getData() {
+   @objc func getData() {
         guard let downloadURL = url else { return }
         URLSession.shared.dataTask(with: downloadURL) { data, urlResponse, error in
             guard let data = data, error == nil, urlResponse != nil else {
@@ -87,9 +90,9 @@ class VijestiController: UITableViewController {
                 let decoder = JSONDecoder()
                 let podaci = try decoder.decode(Stranica.self, from: data)
                 self.clanci = podaci.articles
-                DispatchQueue.main.async {
+                DispatchQueue.main.async() {
+                    self.refresher.endRefreshing()
                     self.indikator.stopAnimating()
-//                    self.shapeLayer.strokeEnd = 
                     self.tableView.reloadData()
                 }
             } catch {
@@ -105,28 +108,8 @@ class VijestiController: UITableViewController {
         indikator.startAnimating()
         view.addSubview(indikator)
 }
+ 
     
-//    func setUpLoader(){
-//        let circularPath = UIBezierPath(arcCenter: .zero, radius: 100, startAngle: -CGFloat.pi / 2, endAngle: 2 * CGFloat.pi, clockwise: true)
-//        loader.path = circularPath.cgPath
-//        loader.strokeColor = UIColor.lightGray.cgColor
-//        loader.lineWidth = 10
-//        loader.fillColor = UIColor.clear.cgColor
-//        loader.lineCap = kCALineCapRound
-//        loader.position = view.center
-//        view.layer.addSublayer(loader)
-//
-//        shapeLayer.path = circularPath.cgPath
-//        shapeLayer.strokeColor = UIColor.white.cgColor
-//        shapeLayer.lineWidth = 10
-//        shapeLayer.fillColor = UIColor.clear.cgColor
-//        shapeLayer.lineCap = kCALineCapRound
-//        shapeLayer.position = view.center
-//        shapeLayer.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
-//        shapeLayer.strokeEnd = 0
-//        shapeLayer.position = view.center
-//        view.layer.addSublayer(shapeLayer)
-//    }
 }
    
 
