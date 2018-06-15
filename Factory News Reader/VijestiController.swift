@@ -18,26 +18,38 @@ class VijestiController: UITableViewController {
     
     let indikator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
     
-//    lazy var refresher: UIRefreshControl = {
-//        let refreshControl = UIRefreshControl()
-//        refreshControl.tintColor = UIColor.red
-//        refreshControl.addTarget(self, action: #selector(getData), for: .valueChanged)
-//        return refreshControl
-//    }()
+    lazy var refresher: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.red
+        refreshControl.addTarget(self, action: #selector(getData), for: .valueChanged)
+        return refreshControl
+    }()
+    var vrijeme = Date()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
         
         navigationItem.title = "Factory"
         tableView.register(VijestTableViewCell.self, forCellReuseIdentifier: cellID)
         createActivityIndicator()
         getData()
-//        tableView.refreshControl = refresher
+        tableView.refreshControl = refresher
         
         
         // Do any additional setup after loading the view, typically from a nib.
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        let date = NSDate()
+        let usporedbaTime = vrijeme.addingTimeInterval((5*60))
+        if usporedbaTime > date as Date {
+            return
+        } else {
+            getData()
+        }
+        
+    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return clanci.count
@@ -78,28 +90,27 @@ class VijestiController: UITableViewController {
         
     }
     
-   @objc func getData(completion: ((Bool,Error?) -> Void )? = nil) {
+    @objc func getData() {
         guard let downloadURL = url else { return }
         URLSession.shared.dataTask(with: downloadURL) { data, urlResponse, error in
             guard let data = data, error == nil, urlResponse != nil else {
-                completion?(false, error)
                 Greska.alert(title:"Greška", message: "Ups, došlo je do pogreške prilikom prikupljanja podataka.", viewController: self)
                 self.getData()
                 return
             }
             do
             {
+                let time = NSDate()
                 let decoder = JSONDecoder()
                 let podaci = try decoder.decode(Stranica.self, from: data)
                 self.clanci = podaci.articles
-                completion?(true, error)
+                self.vrijeme = time as Date
                 DispatchQueue.main.async() {
-//                    self.refresher.endRefreshing()
+                    self.refresher.endRefreshing()
                     self.indikator.stopAnimating()
                     self.tableView.reloadData()
                 }
             } catch {
-                completion?(false, error)
                 Greska.alert(title:"Greška", message: "Ups, došlo je do pogreške s podacima.", viewController: self)
                 self.getData()
             }
