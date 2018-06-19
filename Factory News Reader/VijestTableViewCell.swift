@@ -10,7 +10,7 @@ import UIKit
 
 
 class VijestTableViewCell: UITableViewCell {
-    
+    //MARK: varijable
     var vijestSlika: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -48,7 +48,7 @@ class VijestTableViewCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    //MARK: layout postavke
     override func layoutSubviews() {
         self.contentView.addSubview(vijestSlika)
         vijestSlika.leftAnchor.constraint(equalTo: self.contentView.leftAnchor).isActive = true

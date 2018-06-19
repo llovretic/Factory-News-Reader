@@ -9,7 +9,7 @@
 import UIKit
 
 class DetaljniPrikazViewController: UIViewController {
-    
+    //MARK: varijable 
     var slika: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -31,7 +31,7 @@ class DetaljniPrikazViewController: UIViewController {
         return tekst
     }()
     
-    var podaci: Clanak!
+    var podaci: VijestiViewData!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +46,7 @@ class DetaljniPrikazViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    
+    //MARK: layout postavke
      func addSubViews() {
         
         view.addSubview(slika)

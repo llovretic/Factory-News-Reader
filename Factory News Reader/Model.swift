@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+//MARK: postavljanje modela 
 struct Stranica: Decodable {
     
     let status: String

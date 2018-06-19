@@ -9,7 +9,7 @@
 import UIKit
 
 class Greska: UIAlertController {
-    
+    //MARK: postavljanje alerta
     class func alert(title: String, message: String, viewController: UIViewController) -> Void
     {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
