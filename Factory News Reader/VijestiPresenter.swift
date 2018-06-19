@@ -34,7 +34,19 @@ class VijestiPresenter {
     }
     
     func getData(){
-        
-        }
-    }
+        self.vijestiView?.startLoading()
+        vijestiService.getData{ vijesti in
+            self.vijestiView?.finishLoading()
+            print(vijesti!)
+            
+//            vijestiView?.setVijesti(vijesti!)
+            
 
+        }
+        
+            
+        
+           
+        }
+    
+}

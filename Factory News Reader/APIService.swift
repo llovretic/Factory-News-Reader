@@ -17,12 +17,12 @@ class APIService {
     var clanci: [Clanak] = []
     
     //MARK: Funkcija za skidanje podataka
-    @objc func getData() {
+    func getData(completed:@escaping ([Clanak]?) -> (Void)) {
         guard let downloadURL = url else { return }
         URLSession.shared.dataTask(with: downloadURL) { data, urlResponse, error in
             guard let data = data, error == nil, urlResponse != nil else {
-//                Greska.alert(title:"Greška", message: "Ups, došlo je do pogreške prilikom prikupljanja podataka.", viewController: VijestiController)
-                self.getData()
+//                Greska.alert(title:"Greška", message: "Ups, došlo je do pogreške prilikom prikupljanja podataka.", viewController:  VijestiController)
+                completed(nil)
                 return
             }
             do
@@ -32,15 +32,15 @@ class APIService {
                 let podaci = try decoder.decode(Stranica.self, from: data)
                 self.clanci = podaci.articles
                 self.vrijeme = time as Date
-                print(self.clanci)
-//                DispatchQueue.main.async() {
+                DispatchQueue.main.async() {
+                    completed(self.clanci)
 //                    VijestiController.refresher.endRefreshing()
 //                    VijestiController.indikator.stopAnimating()
 //                    self.tableView.reloadData()
-//                }
+                }
             } catch {
 //                Greska.alert(title:"Greška", message: "Ups, došlo je do pogreške s podacima.", viewController: VijestiController)
-                self.getData()
+                completed(nil)
             }
             }.resume()
     }
