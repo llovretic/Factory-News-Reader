@@ -21,7 +21,7 @@ class APIService {
         guard let downloadURL = url else { return }
         URLSession.shared.dataTask(with: downloadURL) { data, urlResponse, error in
             guard let data = data, error == nil, urlResponse != nil else {
-//                Greska.alert(title:"Greška", message: "Ups, došlo je do pogreške prilikom prikupljanja podataka.", viewController:  VijestiController)
+                Greska.alert(title:"Greška", message: "Ups, došlo je do pogreške prilikom prikupljanja podataka.")
                 completed(nil)
                 return
             }
@@ -39,7 +39,7 @@ class APIService {
 //                    self.tableView.reloadData()
                 }
             } catch {
-//                Greska.alert(title:"Greška", message: "Ups, došlo je do pogreške s podacima.", viewController: VijestiController)
+                Greska.alert(title:"Greška", message: "Ups, došlo je do pogreške s podacima.")
                 completed(nil)
             }
             }.resume()

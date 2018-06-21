@@ -102,6 +102,10 @@ class VijestiController: UITableViewController {
 //MARK: extensions
 
 extension VijestiController: VijestiView {
+    func setEmptyUsers() {
+        tableView.isHidden = true
+    }
+    
     func startLoading() {
         indikator.startAnimating()
     }

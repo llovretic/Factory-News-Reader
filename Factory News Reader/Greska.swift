@@ -10,7 +10,7 @@ import UIKit
 
 class Greska: UIAlertController {
     //MARK: postavljanje alerta
-    class func alert(title: String, message: String, viewController: UIViewController) -> Void
+    class func alert(title: String, message: String) -> Void
     {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
@@ -19,6 +19,6 @@ class Greska: UIAlertController {
         }
         
         alert.addAction(akcija)
-        viewController.present(alert, animated: true, completion:nil)
+        alert.present(alert, animated: true, completion:nil)
     }
 }

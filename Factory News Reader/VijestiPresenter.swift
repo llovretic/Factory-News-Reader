@@ -18,12 +18,15 @@ protocol VijestiView: NSObjectProtocol{
     func startLoading()
     func finishLoading()
     func setVijesti(_ vijesti: [VijestiViewData])
+    func setEmptyUsers()
 }
+
 
 class VijestiPresenter {
     
     fileprivate let vijestiService: APIService
     weak fileprivate var vijestiView: VijestiView?
+    var vijestiData: [VijestiViewData] = []
     
     init(vijestiService: APIService){
         self.vijestiService = vijestiService
@@ -33,20 +36,26 @@ class VijestiPresenter {
         vijestiView = view
     }
     
+    func parsiranjeData(vijesti: [Clanak] )-> [VijestiViewData]{
+        let mappedvijesti = vijesti.map { (novosti) -> VijestiViewData in
+            return VijestiViewData(title: novosti.title, description: novosti.description, urlToImage: novosti.urlToImage)
+        }
+        
+        return(mappedvijesti)
+    }
+
+    
     func getData(){
         self.vijestiView?.startLoading()
         vijestiService.getData{ vijesti in
             self.vijestiView?.finishLoading()
-            print(vijesti!)
-            
-//            vijestiView?.setVijesti(vijesti!)
-            
-
-        }
-        
-            
-        
-           
+            self.vijestiData = self.parsiranjeData(vijesti: vijesti!)
+            self.vijestiView?.setVijesti(self.vijestiData)
         }
     
+
+    }
+   
+
 }
+
