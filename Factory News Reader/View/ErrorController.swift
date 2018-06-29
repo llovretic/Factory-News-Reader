@@ -8,17 +8,17 @@
 
 import UIKit
 
-class Greska: UIAlertController {
+class ErrorController: UIAlertController {
     //MARK: postavljanje alerta
     class func alert(title: String, message: String) -> Void
     {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
-        let akcija = UIAlertAction(title: "U redu", style: .default) { (action:UIAlertAction!) in
+        let action = UIAlertAction(title: "U redu", style: .default) { (action:UIAlertAction!) in
             // PITATI U PETAK KAKO BI KORISTILI getData() U ALERTU NAKON CLICKA NA BUTtON
         }
         
-        alert.addAction(akcija)
+        alert.addAction(action)
         alert.present(alert, animated: true, completion:nil)
     }
 }

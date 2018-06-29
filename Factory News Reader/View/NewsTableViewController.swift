@@ -9,12 +9,12 @@
 import UIKit
 
 
-class VijestiController: UITableViewController {
+class NewsTableViewController: UITableViewController {
     //MARK: varijable
     let cellID = "CellID"
-    let indikator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
-    fileprivate let vijestiPresenter = VijestiPresenter(vijestiService: APIService())
-    fileprivate var vijestiZaPokazat = [VijestiViewData]()
+    let indicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
+    fileprivate let newsPresenter = NewsListPresenter(newsService: APIService())
+    fileprivate var newsForDisplay = [NewsViewData]()
     
 //    lazy var refresher: UIRefreshControl = {
 //        let refreshControl = UIRefreshControl()
@@ -23,50 +23,43 @@ class VijestiController: UITableViewController {
 //        return refreshControl
 //    }()
     
-    var vrijeme = Date()
+    var time = Date()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.title = "Factory"
-        tableView.register(VijestTableViewCell.self, forCellReuseIdentifier: cellID)
+        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: cellID)
         createActivityIndicator()
-        vijestiPresenter.attachView(self)
-        vijestiPresenter.getData()
+        newsPresenter.attachView(self)
+        newsPresenter.getData()
         
 //        tableView.refreshControl = refresher
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        let date = NSDate()
-        let usporedbaTime = vrijeme.addingTimeInterval((5*60))
-        if usporedbaTime > date as Date {
-            return
-        } else {
-//            getData()
-        }
-        
+        newsPresenter.inspectNews()
     }
     
     //MARK: Funkcije za posatavljanje tableViewa
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return vijestiZaPokazat.count
+        return newsForDisplay.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellID) as? VijestTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellID) as? NewsTableViewCell else {
             return UITableViewCell()
         }
-        cell.vijestNaslov.text = vijestiZaPokazat[indexPath.row].title
-        cell.vijestOpis.text = vijestiZaPokazat[indexPath.row].description
+        cell.newsTitle.text = newsForDisplay[indexPath.row].title
+        cell.newsDescription.text = newsForDisplay[indexPath.row].description
         
-        if let imageURL = URL(string: vijestiZaPokazat[indexPath.row].urlToImage) {
+        if let imageURL = URL(string: newsForDisplay[indexPath.row].urlToImage) {
             DispatchQueue.global().async {
                 let data = try? Data(contentsOf: imageURL)
                 if let data = data {
                     let image = UIImage(data: data)
                     DispatchQueue.main.async {
-                        cell.vijestSlika.image = image
+                        cell.newsImage.image = image
                     }
                 }
             }
@@ -81,19 +74,21 @@ class VijestiController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detaljniViewController = DetaljniPrikazViewController  ()
-        let podaci = vijestiZaPokazat[indexPath.row]
-        detaljniViewController.podaci = podaci
-        navigationController?.pushViewController(detaljniViewController, animated: true)
+        let newsDeatilViewController = NewsDetailViewController()
+        let newsDetailPresneter = NewsDetailPresenter()
+        let data = newsForDisplay[indexPath.row]
+        newsDetailPresneter.newsData = [data]
+        print(newsDetailPresneter.newsData)
+        navigationController?.pushViewController(newsDeatilViewController, animated: true)
         
     }
     
     //MARK: Funkcija za postavljanje indikatora
     func createActivityIndicator() {
-        indikator.center = view.center
-        indikator.color = UIColor.red
-        indikator.startAnimating()
-        view.addSubview(indikator)
+        indicator.center = view.center
+        indicator.color = UIColor.red
+        indicator.startAnimating()
+        view.addSubview(indicator)
     }
     
  
@@ -101,30 +96,25 @@ class VijestiController: UITableViewController {
 }
 //MARK: extensions
 
-extension VijestiController: VijestiView {
+extension NewsTableViewController: NewsView {
     func setEmptyUsers() {
         tableView.isHidden = true
     }
     
     func startLoading() {
-        indikator.startAnimating()
+        indicator.startAnimating()
     }
     
     func finishLoading() {
-        indikator.stopAnimating()
+        indicator.stopAnimating()
     }
     
-    func setVijesti(_ vijesti: [VijestiViewData]) {
-        vijestiZaPokazat = vijesti
+    func setNews(_ news: [NewsViewData]) {
+        newsForDisplay = news
         self.tableView.reloadData()
     }
     
-    
-    
-    
-    
-    
-    
+
     
     
 }

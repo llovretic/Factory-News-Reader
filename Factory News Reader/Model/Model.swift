@@ -8,16 +8,16 @@
 
 import UIKit
 //MARK: postavljanje modela 
-struct Stranica: Decodable {
+struct WebPage: Decodable {
     
     let status: String
     let source: String
     let sortBy: String
-    let articles: [Clanak]
+    let articles: [Article]
     
 }
 
-struct Clanak: Decodable{
+struct Article: Decodable{
     
     let author: String
     let title: String
