@@ -14,7 +14,6 @@ class NewsTableViewController: UITableViewController {
     let cellID = "CellID"
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
     fileprivate let newsPresenter = NewsListPresenter(newsService: APIService())
-    fileprivate var newsForDisplay = [NewsViewData]()
     
 //    lazy var refresher: UIRefreshControl = {
 //        let refreshControl = UIRefreshControl()
@@ -31,29 +30,30 @@ class NewsTableViewController: UITableViewController {
         navigationItem.title = "Factory"
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: cellID)
         createActivityIndicator()
-        newsPresenter.attachView(self)
         newsPresenter.getData()
-        
+        newsPresenter.attachView(self)
 //        tableView.refreshControl = refresher
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        self.tableView.reloadData()
         newsPresenter.inspectNews()
     }
     
     //MARK: Funkcije za posatavljanje tableViewa
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return newsForDisplay.count
+        return newsPresenter.newsData.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellID) as? NewsTableViewCell else {
             return UITableViewCell()
         }
-        cell.newsTitle.text = newsForDisplay[indexPath.row].title
-        cell.newsDescription.text = newsForDisplay[indexPath.row].description
+        let dataForDisplay = newsPresenter.newsData[indexPath.row]
+        cell.newsTitle.text = dataForDisplay.title
+        cell.newsDescription.text = dataForDisplay.description
         
-        if let imageURL = URL(string: newsForDisplay[indexPath.row].urlToImage) {
+        if let imageURL = URL(string: dataForDisplay.urlToImage) {
             DispatchQueue.global().async {
                 let data = try? Data(contentsOf: imageURL)
                 if let data = data {
@@ -76,9 +76,9 @@ class NewsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let newsDeatilViewController = NewsDetailViewController()
         let newsDetailPresneter = NewsDetailPresenter()
-        let data = newsForDisplay[indexPath.row]
-        newsDetailPresneter.newsData = [data]
-        print(newsDetailPresneter.newsData)
+        let data = newsPresenter.newsData[indexPath.row]
+        newsDetailPresneter.newsDetailData = data
+        newsDeatilViewController.newsPresenter = newsDetailPresneter
         navigationController?.pushViewController(newsDeatilViewController, animated: true)
         
     }
@@ -97,6 +97,10 @@ class NewsTableViewController: UITableViewController {
 //MARK: extensions
 
 extension NewsTableViewController: NewsView {
+    func refreshNews() {
+        tableView.reloadData()
+    }
+    
     func setEmptyUsers() {
         tableView.isHidden = true
     }
@@ -108,13 +112,5 @@ extension NewsTableViewController: NewsView {
     func finishLoading() {
         indicator.stopAnimating()
     }
-    
-    func setNews(_ news: [NewsViewData]) {
-        newsForDisplay = news
-        self.tableView.reloadData()
-    }
-    
 
-    
-    
 }

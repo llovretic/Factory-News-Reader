@@ -9,25 +9,17 @@
 import Foundation
 
 protocol NewsDetailView {
-    func setDetailNews(_ news: [NewsViewData])
 }
 
 class NewsDetailPresenter {
     
     fileprivate var newsDetailView: NewsDetailView?
     
-    var newsData: [NewsViewData] = []
+    var newsDetailData: NewsViewData!
 
     
     func attachView(_ view: NewsDetailView){
         newsDetailView = view
-        print(newsData)
     }
-    
-//    func getDetailData(){
-//        newsData = data
-//    }
-//    
-
 }
 

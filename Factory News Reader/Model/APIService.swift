@@ -45,6 +45,7 @@ class APIService {
 //            }
 //            }.resume()
 //    }
+    
     func getData(completed:@escaping ([Article]?) -> (Void)){
         Alamofire.request(url).responseJSON{ response in
             switch response.result

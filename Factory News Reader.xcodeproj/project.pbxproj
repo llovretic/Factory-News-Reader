@@ -75,11 +75,12 @@
 		475F883220CA67F000A48C8C /* Factory News Reader */ = {
 			isa = PBXGroup;
 			children = (
+				476B450F20E7BFF2003B547C /* Error */,
 				47C909E620E5C42200D45D51 /* Model */,
-				47C909E520E5C40C00D45D51 /* View */,
-				47C909E720E5C42E00D45D51 /* Presenter */,
-				475F883720CA67F000A48C8C /* Main.storyboard */,
+				476B450B20E7BF63003B547C /* ListNews */,
+				476B450C20E7BFCD003B547C /* DetailNews */,
 				475F883A20CA67F000A48C8C /* Assets.xcassets */,
+				475F883720CA67F000A48C8C /* Main.storyboard */,
 				475F883C20CA67F000A48C8C /* LaunchScreen.storyboard */,
 				475F883F20CA67F000A48C8C /* Info.plist */,
 				475F883320CA67F000A48C8C /* AppDelegate.swift */,
@@ -87,12 +88,52 @@
 			path = "Factory News Reader";
 			sourceTree = "<group>";
 		};
+		476B450B20E7BF63003B547C /* ListNews */ = {
+			isa = PBXGroup;
+			children = (
+				47C909E520E5C40C00D45D51 /* View */,
+				47C909E720E5C42E00D45D51 /* Presenter */,
+			);
+			path = ListNews;
+			sourceTree = "<group>";
+		};
+		476B450C20E7BFCD003B547C /* DetailNews */ = {
+			isa = PBXGroup;
+			children = (
+				476B450D20E7BFD8003B547C /* View */,
+				476B450E20E7BFE4003B547C /* Presenter */,
+			);
+			path = DetailNews;
+			sourceTree = "<group>";
+		};
+		476B450D20E7BFD8003B547C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				476AD2DB20CC281E0023FA6B /* NewsDetailViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		476B450E20E7BFE4003B547C /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				47C909E320E59C9300D45D51 /* NewsDetailPresenter.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		476B450F20E7BFF2003B547C /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				471C7BC820D01DCD00F038E1 /* ErrorController.swift */,
+			);
+			path = Error;
+			sourceTree = "<group>";
+		};
 		47C909E520E5C40C00D45D51 /* View */ = {
 			isa = PBXGroup;
 			children = (
 				475F884520CA7C4300A48C8C /* NewsTableViewCell.swift */,
-				471C7BC820D01DCD00F038E1 /* ErrorController.swift */,
-				476AD2DB20CC281E0023FA6B /* NewsDetailViewController.swift */,
 				475F883520CA67F000A48C8C /* NewsTableViewController.swift */,
 			);
 			path = View;
@@ -110,7 +151,6 @@
 		47C909E720E5C42E00D45D51 /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
-				47C909E320E59C9300D45D51 /* NewsDetailPresenter.swift */,
 				47BCA68A20D9205600619C09 /* NewsListPresenter.swift */,
 			);
 			path = Presenter;

@@ -18,7 +18,7 @@ struct NewsViewData{
 protocol NewsView: NSObjectProtocol{
     func startLoading()
     func finishLoading()
-    func setNews(_ news: [NewsViewData])
+    func refreshNews()
     func setEmptyUsers()
 }
 
@@ -55,7 +55,7 @@ class NewsListPresenter {
         newsService.getData{ news in
             self.newsView?.finishLoading()
             self.newsData = self.parsingData(news: news!)
-            self.newsView?.setNews(self.newsData)
+            self.newsView?.refreshNews()
             let timeSuccess = Date()
             self.time = timeSuccess
         }
@@ -70,9 +70,6 @@ class NewsListPresenter {
             return
         } else {
             getData()
-            let newViewController = NewsTableViewController()
-            newViewController.tableView.reloadData()
-            
         }
     }
 

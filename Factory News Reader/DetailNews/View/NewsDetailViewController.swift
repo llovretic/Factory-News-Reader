@@ -10,8 +10,7 @@ import UIKit
 
 class NewsDetailViewController: UIViewController {
     //MARK: varijable
-    fileprivate let newsPresenter = NewsDetailPresenter()
-   fileprivate var newsForDisplay = [NewsViewData]()
+    var newsPresenter: NewsDetailPresenter!
     
     var newsImage: UIImageView = {
         let imageView = UIImageView()
@@ -41,7 +40,6 @@ class NewsDetailViewController: UIViewController {
         super.viewDidLoad()
         newsPresenter.attachView(self)
         addSubViews()
-        print(data)
         view.backgroundColor = UIColor.white
         
         // Do any additional setup after loading the view.
@@ -54,20 +52,18 @@ class NewsDetailViewController: UIViewController {
     
     //MARK: layout postavke
      func addSubViews() {
-       let data = newsForDisplay
-
         view.addSubview(newsImage)
-//        if let imageURL = URL(string: data.) {
-//            DispatchQueue.global().async {
-//                let data = try? Data(contentsOf: imageURL)
-//                if let data = data {
-//                    let image = UIImage(data: data)
-//                    DispatchQueue.main.async {
-//                        self.newsImage.image = image
-//                    }
-//                }
-//            }
-//        }
+        if let imageURL = URL(string: newsPresenter.newsDetailData.urlToImage) {
+            DispatchQueue.global().async {
+                let data = try? Data(contentsOf: imageURL)
+                if let data = data {
+                    let image = UIImage(data: data)
+                    DispatchQueue.main.async {
+                        self.newsImage.image = image
+                    }
+                }
+            }
+        }
         newsImage.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         newsImage.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         newsImage.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -75,7 +71,7 @@ class NewsDetailViewController: UIViewController {
         newsImage.heightAnchor.constraint(equalToConstant: 300).isActive = true
         
         view.addSubview(newsTitle)
-//        newsTitle.text = 
+        newsTitle.text = newsPresenter.newsDetailData.title
         newsTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 8).isActive = true
         newsTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -8).isActive = true
         newsTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 308).isActive = true
@@ -83,23 +79,18 @@ class NewsDetailViewController: UIViewController {
         
       
         view.addSubview(newsDescription)
-        newsDescription.text = data.description
+        newsDescription.text = newsPresenter.newsDetailData.description
         newsDescription.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 8).isActive = true
         newsDescription.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -8).isActive = true
         newsDescription.topAnchor.constraint(equalTo: newsTitle.bottomAnchor, constant: 8).isActive = true
         newsDescription.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-//        navigationItem.title = data.title
+        navigationItem.title = newsPresenter.newsDetailData.title
         
     }
 
 }
 extension NewsDetailViewController: NewsDetailView{
-    func setDetailNews(_ news: [NewsViewData]) {
-        newsForDisplay = news
-    }
-    
-    
 }
 
 
