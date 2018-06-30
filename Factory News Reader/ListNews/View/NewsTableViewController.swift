@@ -24,7 +24,6 @@ class NewsTableViewController: UITableViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         navigationItem.title = "Factory"
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: cellID)
         createActivityIndicator()
@@ -61,8 +60,6 @@ class NewsTableViewController: UITableViewController {
                 }
             }
         }
-        
-        
         return cell
     }
     
@@ -87,12 +84,8 @@ class NewsTableViewController: UITableViewController {
         indicator.startAnimating()
         view.addSubview(indicator)
     }
-    
- 
-    
 }
 //MARK: extensions
-
 extension NewsTableViewController: NewsView {
     func refreshNews() {
         tableView.reloadData()
@@ -109,5 +102,4 @@ extension NewsTableViewController: NewsView {
     func finishLoading() {
         indicator.stopAnimating()
     }
-
 }

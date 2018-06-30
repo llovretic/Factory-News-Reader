@@ -22,7 +22,6 @@ protocol NewsView: NSObjectProtocol{
     func setEmptyUsers()
 }
 
-
 class NewsListPresenter {
     
     fileprivate let newsService: APIService
@@ -48,7 +47,6 @@ class NewsListPresenter {
         }
         return(mappedNews)
     }
-
     
     func getData(){
         self.newsView?.startLoading()
@@ -72,6 +70,5 @@ class NewsListPresenter {
             getData()
         }
     }
-
 }
 

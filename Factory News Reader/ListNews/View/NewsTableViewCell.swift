@@ -50,6 +50,7 @@ class NewsTableViewCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     //MARK: layout postavke
     override func layoutSubviews() {
         self.contentView.addSubview(newsImage)
@@ -66,9 +67,5 @@ class NewsTableViewCell: UITableViewCell {
         newsDescription.leftAnchor.constraint(equalTo: newsImage.rightAnchor, constant: 8).isActive = true
         newsDescription.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 8).isActive = true
         newsDescription.centerYAnchor.constraint(equalTo: newsImage.centerYAnchor, constant: 8).isActive = true
-       
-
     }
-    
-    
 }

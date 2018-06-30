@@ -9,16 +9,13 @@
 import UIKit
 //MARK: postavljanje modela 
 struct WebPage: Decodable {
-    
     let status: String
     let source: String
     let sortBy: String
     let articles: [Article]
-    
 }
 
 struct Article: Decodable{
-    
     let author: String
     let title: String
     let description: String

@@ -16,7 +16,6 @@ class NewsDetailPresenter {
     fileprivate var newsDetailView: NewsDetailView?
     
     var newsDetailData: NewsViewData!
-
     
     func attachView(_ view: NewsDetailView){
         newsDetailView = view
