@@ -18,58 +18,23 @@ class APIService {
     var news: [Article] = []
     
     //MARK: Funkcija za skidanje podataka
-//    func getData(completed:@escaping ([Clanak]?) -> (Void)) {
-//        guard let downloadURL = url else { return }
-//        URLSession.shared.dataTask(with: downloadURL) { data, urlResponse, error in
-//            guard let data = data, error == nil, urlResponse != nil else {
-//                Greska.alert(title:"Greška", message: "Ups, došlo je do pogreške prilikom prikupljanja podataka.")
-//                completed(nil)
-//                return
-//            }
-//            do
-//            {
-//                let time = NSDate()
-//                let decoder = JSONDecoder()
-//                let podaci = try decoder.decode(Stranica.self, from: data)
-//                self.clanci = podaci.articles
-//                self.vrijeme = time as Date
-//                DispatchQueue.main.async() {
-//                    completed(self.clanci)
-////                    VijestiController.refresher.endRefreshing()
-////                    VijestiController.indikator.stopAnimating()
-////                    self.tableView.reloadData()
-//                }
-//            } catch {
-//                Greska.alert(title:"Greška", message: "Ups, došlo je do pogreške s podacima.")
-//                completed(nil)
-//            }
-//            }.resume()
-//    }
-    
-    func getData(completed:@escaping ([Article]?) -> (Void)){
+        func getData(completed:@escaping ([Article]?) -> (Void)){
         Alamofire.request(url).responseJSON{ response in
             switch response.result
             {
             case .success:
+                let decoder = JSONDecoder()
+                let jsonData = response.data
                 // Parsing data
-                let json = response.result.value as! [String: Any]
-                let jsonArticles = json["articles"] as! NSArray
-                for articles in jsonArticles
-                {
-                    // Saving important values
-                    var values = articles as! [String: String]
-                    let author = (values["author"] as String?) ?? ""
-                    let title = (values["title"] as String?) ?? ""
-                    let description = (values["description"] as String?) ?? ""
-                    let url = (values["url"] as String?) ?? ""
-                    let urlToImage = (values["urlToImage"] as String?) ?? ""
-                    let publishedAt = (values["publishedAt"] as String?) ?? ""
-                    
-                    let data = Article(author: author, title: title, description: description, url: url,urlToImage: urlToImage, publishedAt: publishedAt )
-                    self.news += [data]
-                    
+                do {
+                    let data = try decoder.decode(WebPage.self, from: jsonData!)
+                    self.news = data.articles
+                    DispatchQueue.main.async(){
+                        completed(self.news)
+                    }
+                } catch {
+                    completed(nil)
                 }
-                
             case .failure(let error):
                 ErrorController.alert(title: "Greška!", message: "Ups, došlo je do pogreške!")
                 print(error)
