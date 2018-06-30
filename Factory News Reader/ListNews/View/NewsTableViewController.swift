@@ -21,9 +21,7 @@ class NewsTableViewController: UITableViewController {
 //        refreshControl.addTarget(self, action: #selector(APIService.getData), for: .valueChanged)
 //        return refreshControl
 //    }()
-    
-    var time = Date()
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,7 +34,6 @@ class NewsTableViewController: UITableViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.tableView.reloadData()
         newsPresenter.inspectNews()
     }
     

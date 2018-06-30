@@ -20,12 +20,14 @@ class NewsTableViewCell: UITableViewCell {
     
     var newsTitle: UILabel = {
         let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     var newsDescription: UILabel = {
         let label = UILabel()
+        label.font = .italicSystemFont(ofSize: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

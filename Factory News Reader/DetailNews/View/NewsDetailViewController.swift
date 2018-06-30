@@ -21,20 +21,19 @@ class NewsDetailViewController: UIViewController {
     
     var newsTitle: UILabel = {
         let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     var newsDescription: UITextView = {
-        let tekst = UITextView()
-        tekst.translatesAutoresizingMaskIntoConstraints = false
-        tekst.isEditable = false
-        tekst.isScrollEnabled = true
-        return tekst
+        let textView = UITextView()
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.isEditable = false
+        textView.isScrollEnabled = true
+        textView.font = .italicSystemFont(ofSize: 18)
+        return textView
     }()
-    
-    var data: [NewsViewData] = []
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
