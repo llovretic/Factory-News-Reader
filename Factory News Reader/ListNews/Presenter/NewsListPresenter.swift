@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import RxSwift
 
 struct NewsViewData{
     let title: String
@@ -28,10 +29,11 @@ class NewsListPresenter {
     weak fileprivate var newsView: NewsView?
     
     var newsData: [NewsViewData] = []
-    var time = Date()
+    var successTime = Date()
     var newsImage = UIImage()
     var newsTitle = UILabel()
     var newsDescrtipiton = UITextView()
+    let disposeBag = DisposeBag()
     
     init(newsService: APIService){
         self.newsService = newsService
@@ -41,30 +43,32 @@ class NewsListPresenter {
         newsView = view
     }
     
-    func parsingData(news: [Article] ) -> [NewsViewData]{
-        let mappedNews = news.map { (news) -> NewsViewData in
-            return NewsViewData(title: news.title, description: news.description, urlToImage: news.urlToImage)
-        }
-        return(mappedNews)
-    }
-    
     func getData(){
         self.newsView?.startLoading()
-        newsService.getData{ news in
-            self.newsView?.finishLoading()
-            self.newsData = self.parsingData(news: news!)
-            self.newsView?.refreshNews()
-            let timeSuccess = Date()
-            self.time = timeSuccess
-        }
-    
+        let newsObservable = newsService.getData()
+        newsObservable
+            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            .map({ (news) -> [NewsViewData] in
+                return news.map { (news) -> NewsViewData in
+                    return NewsViewData(title: news.title, description: news.description, urlToImage: news.urlToImage)
+                }
+            })
+            .observeOn(MainScheduler.instance)
 
+            .subscribe(onNext: { (articles) in
+                self.newsView?.finishLoading()
+                self.newsData = articles
+                self.newsView?.refreshNews()
+                let timeOfSuccess = Date()
+                self.successTime = timeOfSuccess
+            })
+            .disposed(by: disposeBag)
     }
     
     func inspectNews() {
-        let date = Date()
-        let compareTime = time.addingTimeInterval((5*60))
-        if compareTime > date  {
+        let currentTime = Date()
+        let compareTime = successTime.addingTimeInterval((5*60))
+        if compareTime > currentTime  {
             return
         } else {
             getData()
