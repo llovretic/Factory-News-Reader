@@ -30,9 +30,6 @@ class NewsListPresenter {
     
     var newsData: [NewsViewData] = []
     var successTime = Date()
-    var newsImage = UIImage()
-    var newsTitle = UILabel()
-    var newsDescrtipiton = UITextView()
     let disposeBag = DisposeBag()
     
     init(newsService: APIService){
@@ -54,7 +51,6 @@ class NewsListPresenter {
                 }
             })
             .observeOn(MainScheduler.instance)
-
             .subscribe(onNext: { (articles) in
                 self.newsView?.finishLoading()
                 self.newsData = articles

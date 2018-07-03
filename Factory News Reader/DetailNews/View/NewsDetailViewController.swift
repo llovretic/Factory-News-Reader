@@ -40,13 +40,10 @@ class NewsDetailViewController: UIViewController {
         newsPresenter.attachView(self)
         addSubViews()
         view.backgroundColor = UIColor.white
-        
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     //MARK: layout postavke
@@ -66,7 +63,6 @@ class NewsDetailViewController: UIViewController {
         newsImage.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         newsImage.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         newsImage.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-//        slika.widthAnchor.constraint(equalToConstant: 80).isActive = true
         newsImage.heightAnchor.constraint(equalToConstant: 300).isActive = true
         
         view.addSubview(newsTitle)
@@ -85,10 +81,9 @@ class NewsDetailViewController: UIViewController {
         newsDescription.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         navigationItem.title = newsPresenter.newsDetailData.title
-        
     }
-
 }
+
 extension NewsDetailViewController: NewsDetailView{
 }
 

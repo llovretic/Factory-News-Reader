@@ -13,9 +13,7 @@ import RxSwift
 class APIService {
     
     let url = "https://newsapi.org/v1/articles?apiKey=6946d0c07a1c4555a4186bfcade76398&sortBy=top&source=bbc-news"
-    
-    var news: [Article] = []
-    
+        
     //MARK: Funkcija za skidanje podataka
     func getData() -> Observable<[Article]> {
         return Observable<[Article]>.create { observer in
@@ -40,9 +38,7 @@ class APIService {
                         }
                         
                     case .failure(let error):
-                        
                         print(error)
-                        
                     }
             }
             return Disposables.create {
