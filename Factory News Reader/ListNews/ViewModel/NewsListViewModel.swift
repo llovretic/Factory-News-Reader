@@ -15,18 +15,19 @@ struct NewsViewData{
     let description: String
     let urlToImage: String
 }
+//
+//protocol NewsView: NSObjectProtocol{
+//    func startLoading()
+//    func finishLoading()
+//    func refreshNews()
+//    func setEmptyUsers()
+//}
 
-protocol NewsView: NSObjectProtocol{
-    func startLoading()
-    func finishLoading()
-    func refreshNews()
-    func setEmptyUsers()
-}
-
-class NewsListPresenter {
+class NewsListViewModel {
     
     fileprivate let newsService: APIService
-    weak fileprivate var newsView: NewsView?
+//    weak fileprivate var newsView: NewsView?
+    let dataIsReady = PublishSubject<Bool>()
     
     var newsData: [NewsViewData] = []
     var successTime = Date()
@@ -36,14 +37,14 @@ class NewsListPresenter {
         self.newsService = newsService
     }
     
-    func attachView(_ view: NewsView){
-        newsView = view
-    }
+//    func attachView(_ view: NewsView){
+//        newsView = view
+//    }
     
     func getData(){
-        self.newsView?.startLoading()
-        let newsObservable = newsService.getData()
-        newsObservable
+//        self.newsView?.startLoading()
+        let newsObserver = newsService.getData()
+        newsObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .map({ (news) -> [NewsViewData] in
                 return news.map { (news) -> NewsViewData in
@@ -52,13 +53,12 @@ class NewsListPresenter {
             })
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { (articles) in
-                self.newsView?.finishLoading()
                 self.newsData = articles
-                self.newsView?.refreshNews()
+                self.dataIsReady.onNext(true)
                 let timeOfSuccess = Date()
                 self.successTime = timeOfSuccess
             })
-            .disposed(by: disposeBag)
+//            .disposed(by: disposeBag)
     }
     
     func inspectNews() {

@@ -7,13 +7,16 @@
 //
 
 import UIKit
+import RxSwift
 
 
 class NewsTableViewController: UITableViewController {
     //MARK: varijable
+    let disposeBag = DisposeBag()
     let cellID = "CellID"
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
-    fileprivate let newsPresenter = NewsListPresenter(newsService: APIService())
+    fileprivate let newsViewModel = NewsListViewModel(newsService: APIService())
+
     
 //    lazy var refresher: UIRefreshControl = {
 //        let refreshControl = UIRefreshControl()
@@ -27,25 +30,26 @@ class NewsTableViewController: UITableViewController {
         navigationItem.title = "Factory"
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: cellID)
         createActivityIndicator()
-        newsPresenter.getData()
-        newsPresenter.attachView(self)
+        newsViewModel.getData()
+        isDataReady()
+//        newsViewModel.attachView(self)
 //        tableView.refreshControl = refresher
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        newsPresenter.inspectNews()
+        newsViewModel.inspectNews()
     }
     
     //MARK: Funkcije za posatavljanje tableViewa
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return newsPresenter.newsData.count
+        return newsViewModel.newsData.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellID) as? NewsTableViewCell else {
             return UITableViewCell()
         }
-        let dataForDisplay = newsPresenter.newsData[indexPath.row]
+        let dataForDisplay = newsViewModel.newsData[indexPath.row]
         cell.newsTitle.text = dataForDisplay.title
         cell.newsDescription.text = dataForDisplay.description
         
@@ -70,7 +74,7 @@ class NewsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let newsDeatilViewController = NewsDetailViewController()
         let newsDetailPresneter = NewsDetailPresenter()
-        let data = newsPresenter.newsData[indexPath.row]
+        let data = newsViewModel.newsData[indexPath.row]
         newsDetailPresneter.newsDetailData = data
         newsDeatilViewController.newsPresenter = newsDetailPresneter
         navigationController?.pushViewController(newsDeatilViewController, animated: true)
@@ -84,22 +88,38 @@ class NewsTableViewController: UITableViewController {
         indicator.startAnimating()
         view.addSubview(indicator)
     }
-}
+    
+    func isDataReady(){
+        let observer = newsViewModel.dataIsReady
+        observer
+            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+        .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { (event) in
+                if event {
+                    self.tableView.reloadData()
+                    self.indicator.stopAnimating()
+                }
+            })
+            .disposed(by: disposeBag)
+        }
+    }
+
 //MARK: extensions
-extension NewsTableViewController: NewsView {
-    func refreshNews() {
-        tableView.reloadData()
-    }
-    
-    func setEmptyUsers() {
-        tableView.isHidden = true
-    }
-    
-    func startLoading() {
-        indicator.startAnimating()
-    }
-    
-    func finishLoading() {
-        indicator.stopAnimating()
-    }
-}
+//extension NewsTableViewController: NewsView {
+//    func refreshNews() {
+//        tableView.reloadData()
+//    }
+//    
+//    func setEmptyUsers() {
+//        tableView.isHidden = true
+//    }
+//    
+//    func startLoading() {
+//        indicator.startAnimating()
+//    }
+//    
+//    func finishLoading() {
+//        indicator.stopAnimating()
+//    }
+//}
+
