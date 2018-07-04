@@ -108,9 +108,7 @@ class NewsTableViewController: UITableViewController {
                 if event {
                     self.tableView.reloadData()
                     self.indicator.stopAnimating()
-                } else {
-                    self.indicator.startAnimating()
-                }
+                } 
             })
             .disposed(by: disposeBag)
         }

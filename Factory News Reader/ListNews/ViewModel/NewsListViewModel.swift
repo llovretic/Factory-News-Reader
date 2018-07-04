@@ -28,7 +28,8 @@ class NewsListViewModel {
     fileprivate let newsService: APIService
 //    weak fileprivate var newsView: NewsView?
     let dataIsReady = PublishSubject<Bool>()
-    let loaderControll = Variable(true)
+    let loaderControll = PublishSubject<Bool>()
+    
 
     
     var newsData: [NewsViewData] = []
@@ -44,7 +45,7 @@ class NewsListViewModel {
 //    }
     
     func getDataFromTheService(){
-//        self.newsView?.startLoading()
+        self.loaderControll.onNext(true)
         let newsObserver = newsService.getDataFromAPI()
         _ = newsObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
@@ -56,6 +57,7 @@ class NewsListViewModel {
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] (articles) in
                 self.newsData = articles
+                self.loaderControll.onNext(true)
                 self.dataIsReady.onNext(true)
 //                self.loaderControll.value = false
                 let timeOfSuccess = Date()
@@ -63,6 +65,7 @@ class NewsListViewModel {
             })
 //            .disposed(by: disposeBag)
     }
+    
     
     func inspectNews() {
         let currentTime = Date()
