@@ -57,7 +57,7 @@ class NewsListViewModel {
             .subscribe(onNext: { [unowned self] (articles) in
                 self.newsData = articles
                 self.dataIsReady.onNext(true)
-                self.loaderControll.value = false
+//                self.loaderControll.value = false
                 let timeOfSuccess = Date()
                 self.successTime = timeOfSuccess
             })
