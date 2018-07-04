@@ -83,10 +83,20 @@ class NewsTableViewController: UITableViewController {
     
     //MARK: Funkcija za postavljanje indikatora
     func createActivityIndicator() {
-        indicator.center = view.center
-        indicator.color = UIColor.red
-        indicator.startAnimating()
-        view.addSubview(indicator)
+        let loadingObserver = newsViewModel.loaderControll
+        loadingObserver.asObservable()
+            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [unowned self] (event) in
+                
+                if (event) {
+                    self.indicator.center = self.view.center
+                    self.indicator.color = UIColor.red
+                    self.view.addSubview(self.indicator)
+                    self.indicator.startAnimating()
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
     func isDataReady(){
@@ -98,6 +108,8 @@ class NewsTableViewController: UITableViewController {
                 if event {
                     self.tableView.reloadData()
                     self.indicator.stopAnimating()
+                } else {
+                    self.indicator.startAnimating()
                 }
             })
             .disposed(by: disposeBag)

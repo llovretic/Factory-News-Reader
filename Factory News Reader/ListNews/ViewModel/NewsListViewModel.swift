@@ -28,6 +28,8 @@ class NewsListViewModel {
     fileprivate let newsService: APIService
 //    weak fileprivate var newsView: NewsView?
     let dataIsReady = PublishSubject<Bool>()
+    let loaderControll = Variable(true)
+
     
     var newsData: [NewsViewData] = []
     var successTime = Date()
@@ -55,6 +57,7 @@ class NewsListViewModel {
             .subscribe(onNext: { [unowned self] (articles) in
                 self.newsData = articles
                 self.dataIsReady.onNext(true)
+                self.loaderControll.value = false
                 let timeOfSuccess = Date()
                 self.successTime = timeOfSuccess
             })
