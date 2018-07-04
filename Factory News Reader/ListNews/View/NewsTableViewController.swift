@@ -94,7 +94,7 @@ class NewsTableViewController: UITableViewController {
         observer
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
         .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { (event) in
+            .subscribe(onNext: { [unowned self] event in
                 if event {
                     self.tableView.reloadData()
                     self.indicator.stopAnimating()

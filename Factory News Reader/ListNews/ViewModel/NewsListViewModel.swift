@@ -44,7 +44,7 @@ class NewsListViewModel {
     func getDataFromTheService(){
 //        self.newsView?.startLoading()
         let newsObserver = newsService.getDataFromAPI()
-        newsObserver
+        _ = newsObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .map({ (news) -> [NewsViewData] in
                 return news.map { (news) -> NewsViewData in
@@ -52,7 +52,7 @@ class NewsListViewModel {
                 }
             })
             .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { (articles) in
+            .subscribe(onNext: { [unowned self] (articles) in
                 self.newsData = articles
                 self.dataIsReady.onNext(true)
                 let timeOfSuccess = Date()

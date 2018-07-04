@@ -37,7 +37,6 @@ class NewsDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        newsPresenter.attachView(self)
         addSubViews()
         view.backgroundColor = UIColor.white
     }
@@ -82,6 +81,10 @@ class NewsDetailViewController: UIViewController {
         
         navigationItem.title = newsPresenter.newsDetailData.title
     }
+//    deinit {
+//        print("AJMO no memory leaks")
+//    }
+   
 }
 
 extension NewsDetailViewController: NewsDetailView{
