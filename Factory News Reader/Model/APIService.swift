@@ -15,7 +15,7 @@ class APIService {
     let url = "https://newsapi.org/v1/articles?apiKey=6946d0c07a1c4555a4186bfcade76398&sortBy=top&source=bbc-news"
         
     //MARK: Funkcija za skidanje podataka
-    func getData() -> Observable<[Article]> {
+    func getDataFromAPI() -> Observable<[Article]> {
         return Observable<[Article]>.create { observer in
             let request = Alamofire.request(self.url)
             request.validate()

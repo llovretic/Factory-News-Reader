@@ -41,9 +41,9 @@ class NewsListViewModel {
 //        newsView = view
 //    }
     
-    func getData(){
+    func getDataFromTheService(){
 //        self.newsView?.startLoading()
-        let newsObserver = newsService.getData()
+        let newsObserver = newsService.getDataFromAPI()
         newsObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .map({ (news) -> [NewsViewData] in
@@ -67,7 +67,7 @@ class NewsListViewModel {
         if compareTime > currentTime  {
             return
         } else {
-            getData()
+            getDataFromTheService()
         }
     }
 }

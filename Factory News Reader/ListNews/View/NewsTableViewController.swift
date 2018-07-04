@@ -21,16 +21,16 @@ class NewsTableViewController: UITableViewController {
 //    lazy var refresher: UIRefreshControl = {
 //        let refreshControl = UIRefreshControl()
 //        refreshControl.tintColor = UIColor.red
-//        refreshControl.addTarget(self, action: #selector(APIService.getData), for: .valueChanged)
+//        refreshControl.addTarget(self, action: #selector(newsViewModel.getData), for: .valueChanged)
 //        return refreshControl
 //    }()
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Factory"
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: cellID)
         createActivityIndicator()
-        newsViewModel.getData()
+        newsViewModel.getDataFromTheService()
         isDataReady()
 //        newsViewModel.attachView(self)
 //        tableView.refreshControl = refresher
