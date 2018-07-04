@@ -84,7 +84,7 @@ class NewsTableViewController: UITableViewController {
     //MARK: Funkcija za postavljanje indikatora
     func createActivityIndicator() {
         let loadingObserver = newsViewModel.loaderControll
-        loadingObserver.asObservable()
+        loadingObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] (event) in
