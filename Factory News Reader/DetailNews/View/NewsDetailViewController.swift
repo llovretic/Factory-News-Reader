@@ -34,19 +34,19 @@ class NewsDetailViewController: UIViewController {
         textView.font = .italicSystemFont(ofSize: 18)
         return textView
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubViews()
         view.backgroundColor = UIColor.white
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
     //MARK: layout postavke
-     func addSubViews() {
+    func addSubViews() {
         view.addSubview(newsImage)
         if let imageURL = URL(string: newsDetailViewModel.newsDetailData.urlToImage) {
             DispatchQueue.global().async {
@@ -71,7 +71,7 @@ class NewsDetailViewController: UIViewController {
         newsTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 308).isActive = true
         newsTitle.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 360) .isActive = true
         
-      
+        
         view.addSubview(newsDescription)
         newsDescription.text = newsDetailViewModel.newsDetailData.description
         newsDescription.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 8).isActive = true
@@ -81,7 +81,7 @@ class NewsDetailViewController: UIViewController {
         
         navigationItem.title = newsDetailViewModel.newsDetailData.title
     }
-   
+    
 }
 
 

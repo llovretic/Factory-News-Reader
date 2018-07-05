@@ -14,7 +14,7 @@ class NewsTableViewCell: UITableViewCell {
     var newsImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-//        imageView.contentMode = .scaleAspectFit
+        //        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
@@ -31,20 +31,20 @@ class NewsTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-       
+        
         // Configure the view for the selected state
     }
     override init(style: UITableViewCellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -57,7 +57,7 @@ class NewsTableViewCell: UITableViewCell {
         newsImage.leftAnchor.constraint(equalTo: self.contentView.leftAnchor).isActive = true
         newsImage.widthAnchor.constraint(equalToConstant: 80).isActive = true
         newsImage.heightAnchor.constraint(equalToConstant: 80).isActive = true
-       
+        
         self.contentView.addSubview(newsTitle)
         newsTitle.leftAnchor.constraint(equalTo: newsImage.rightAnchor, constant: 8).isActive = true
         newsTitle.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: 8).isActive = true

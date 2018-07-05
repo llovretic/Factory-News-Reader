@@ -21,42 +21,49 @@ class NewsListViewModel {
     fileprivate let newsService: APIService
     let dataIsReady = PublishSubject<Bool>()
     let loaderControll = PublishSubject<Bool>()
+    let downloadTrigger = PublishSubject<Bool>()
     var newsData: [NewsViewData] = []
-    var successDownloadTime = Date()
+    var successDownloadTime: Date?
     
     init(newsService: APIService){
         self.newsService = newsService
     }
     
-    func getDataFromTheService(){
+    func initialzeObservableDataAPI() -> Disposable{
         self.loaderControll.onNext(true)
-        let newsObserver = newsService.observableFetchData()
-        _ = newsObserver
+        let downloadObserver = downloadTrigger.flatMap { [unowned self] (_) -> Observable<[Article]> in
+            return self.newsService.observableFetchData()
+        }
+        return downloadObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-            .map({ (news) -> [NewsViewData] in
-                return news.map { (news) -> NewsViewData in
+            .observeOn(MainScheduler.instance)
+            .map({ (articles)  -> [NewsViewData] in
+                return articles.map { (news) -> NewsViewData in
                     return NewsViewData(title: news.title, description: news.description, urlToImage: news.urlToImage)
                 }
             })
-            .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [unowned self] (articles) in
-                self.newsData = articles
-                self.loaderControll.onNext(true)
+            .subscribe(onNext:{ [unowned self]  (articles) in
                 self.dataIsReady.onNext(true)
                 self.loaderControll.onNext(false)
-                let timeOfSuccess = Date()
-                self.successDownloadTime = timeOfSuccess
+                self.newsData = articles
+                self.successDownloadTime = Date()
             })
+       
+        
     }
     
     
-    func inspectNews() {
+    func checkingHowOldIsData() {
         let currentTime = Date()
-        let compareTime = successDownloadTime.addingTimeInterval((5*60))
-        if compareTime > currentTime  {
+        if (successDownloadTime == nil) {
+            self.downloadTrigger.onNext(true)
+            return
+        }
+        let compareTime = successDownloadTime?.addingTimeInterval((5*60))
+        if compareTime! > currentTime  {
             return
         } else {
-            getDataFromTheService()
+            self.downloadTrigger.onNext(true)
         }
     }
 }

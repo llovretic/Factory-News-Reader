@@ -12,31 +12,24 @@ import RxSwift
 
 class NewsTableViewController: UITableViewController {
     //MARK: varijable
+    var refresher: UIRefreshControl!
     let disposeBag = DisposeBag()
     let cellID = "CellID"
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
     fileprivate let newsListViewModel = NewsListViewModel(newsService: APIService())
-
-    
-//    lazy var refresher: UIRefreshControl = {
-//        let refreshControl = UIRefreshControl()
-//        refreshControl.tintColor = UIColor.red
-//        refreshControl.addTarget(self, action: #selector(newsViewModel.getData), for: .valueChanged)
-//        return refreshControl
-//    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Factory"
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: cellID)
-        createActivityIndicator()
-        newsListViewModel.getDataFromTheService()
-        isDataReady()
-//        tableView.refreshControl = refresher
+        initialzeLoaderObservable()
+        newsListViewModel.initialzeObservableDataAPI().disposed(by: disposeBag)
+        initialzeDataObservable()
+        intializeRefreshControl()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        newsListViewModel.inspectNews()
+        newsListViewModel.checkingHowOldIsData()
     }
     
     //MARK: Funkcije za posatavljanje tableViewa
@@ -79,7 +72,7 @@ class NewsTableViewController: UITableViewController {
     }
     
     //MARK: Funkcija za postavljanje indikatora
-    func createActivityIndicator() {
+    func initialzeLoaderObservable() {
         let loadingObserver = newsListViewModel.loaderControll
         loadingObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
@@ -98,16 +91,27 @@ class NewsTableViewController: UITableViewController {
             .disposed(by: disposeBag)
     }
     
-    func isDataReady(){
+    func initialzeDataObservable(){
         let dataObserver = newsListViewModel.dataIsReady
         dataObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] event in
                 if event {
+                    self.refresher.endRefreshing()
                     self.tableView.reloadData()
                 }
             })
             .disposed(by: disposeBag)
-        }
     }
+    @objc func refreshAction(){
+        newsListViewModel.downloadTrigger.onNext(true)
+    }
+
+    func intializeRefreshControl() {
+        refresher = UIRefreshControl()
+        tableView.addSubview(refresher)
+        refresher.tintColor = UIColor.red
+        refresher.addTarget(self, action: #selector(refreshAction), for: .valueChanged)
+    }
+}
