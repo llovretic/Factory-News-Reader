@@ -94,6 +94,8 @@ class NewsTableViewController: UITableViewController {
                     self.indicator.color = UIColor.red
                     self.view.addSubview(self.indicator)
                     self.indicator.startAnimating()
+                } else {
+                    self.indicator.stopAnimating()
                 }
             })
             .disposed(by: disposeBag)
@@ -107,8 +109,7 @@ class NewsTableViewController: UITableViewController {
             .subscribe(onNext: { [unowned self] event in
                 if event {
                     self.tableView.reloadData()
-                    self.indicator.stopAnimating()
-                } 
+                }
             })
             .disposed(by: disposeBag)
         }

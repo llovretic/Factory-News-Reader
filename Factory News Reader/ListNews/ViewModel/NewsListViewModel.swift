@@ -59,6 +59,7 @@ class NewsListViewModel {
                 self.newsData = articles
                 self.loaderControll.onNext(true)
                 self.dataIsReady.onNext(true)
+                self.loaderControll.onNext(false)
 //                self.loaderControll.value = false
                 let timeOfSuccess = Date()
                 self.successTime = timeOfSuccess
