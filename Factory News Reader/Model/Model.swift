@@ -8,7 +8,7 @@
 
 import UIKit
 //MARK: postavljanje modela 
-struct WebPage: Decodable {
+struct WebPageJSON: Decodable {
     let status: String
     let source: String
     let sortBy: String

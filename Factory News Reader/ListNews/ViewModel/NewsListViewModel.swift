@@ -15,38 +15,22 @@ struct NewsViewData{
     let description: String
     let urlToImage: String
 }
-//
-//protocol NewsView: NSObjectProtocol{
-//    func startLoading()
-//    func finishLoading()
-//    func refreshNews()
-//    func setEmptyUsers()
-//}
 
 class NewsListViewModel {
     
     fileprivate let newsService: APIService
-//    weak fileprivate var newsView: NewsView?
     let dataIsReady = PublishSubject<Bool>()
     let loaderControll = PublishSubject<Bool>()
-    
-
-    
     var newsData: [NewsViewData] = []
-    var successTime = Date()
-    let disposeBag = DisposeBag()
+    var successDownloadTime = Date()
     
     init(newsService: APIService){
         self.newsService = newsService
     }
     
-//    func attachView(_ view: NewsView){
-//        newsView = view
-//    }
-    
     func getDataFromTheService(){
         self.loaderControll.onNext(true)
-        let newsObserver = newsService.getDataFromAPI()
+        let newsObserver = newsService.observableFetchData()
         _ = newsObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .map({ (news) -> [NewsViewData] in
@@ -60,17 +44,15 @@ class NewsListViewModel {
                 self.loaderControll.onNext(true)
                 self.dataIsReady.onNext(true)
                 self.loaderControll.onNext(false)
-//                self.loaderControll.value = false
                 let timeOfSuccess = Date()
-                self.successTime = timeOfSuccess
+                self.successDownloadTime = timeOfSuccess
             })
-//            .disposed(by: disposeBag)
     }
     
     
     func inspectNews() {
         let currentTime = Date()
-        let compareTime = successTime.addingTimeInterval((5*60))
+        let compareTime = successDownloadTime.addingTimeInterval((5*60))
         if compareTime > currentTime  {
             return
         } else {

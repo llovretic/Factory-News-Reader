@@ -15,7 +15,7 @@ class APIService {
     let url = "https://newsapi.org/v1/articles?apiKey=6946d0c07a1c4555a4186bfcade76398&sortBy=top&source=bbc-news"
         
     //MARK: Funkcija za skidanje podataka
-    func getDataFromAPI() -> Observable<[Article]> {
+    func observableFetchData() -> Observable<[Article]> {
         return Observable<[Article]>.create { observer in
             let request = Alamofire.request(self.url)
             request.validate()
@@ -28,7 +28,7 @@ class APIService {
                         let jsonData = response.data
                         // Parsing data
                         do {
-                            let data = try decoder.decode(WebPage.self, from: jsonData!)
+                            let data = try decoder.decode(WebPageJSON.self, from: jsonData!)
                             observer.onNext(data.articles)
                             observer.onCompleted()
                         }

@@ -11,7 +11,7 @@ import Foundation
 protocol NewsDetailView {
 }
 
-class NewsDetailPresenter {
+class NewsDetailViewModel {
     
     fileprivate var newsDetailView: NewsDetailView?
     

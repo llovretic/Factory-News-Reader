@@ -15,7 +15,7 @@ class NewsTableViewController: UITableViewController {
     let disposeBag = DisposeBag()
     let cellID = "CellID"
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
-    fileprivate let newsViewModel = NewsListViewModel(newsService: APIService())
+    fileprivate let newsListViewModel = NewsListViewModel(newsService: APIService())
 
     
 //    lazy var refresher: UIRefreshControl = {
@@ -30,29 +30,27 @@ class NewsTableViewController: UITableViewController {
         navigationItem.title = "Factory"
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: cellID)
         createActivityIndicator()
-        newsViewModel.getDataFromTheService()
+        newsListViewModel.getDataFromTheService()
         isDataReady()
-//        newsViewModel.attachView(self)
 //        tableView.refreshControl = refresher
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        newsViewModel.inspectNews()
+        newsListViewModel.inspectNews()
     }
     
     //MARK: Funkcije za posatavljanje tableViewa
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return newsViewModel.newsData.count
+        return newsListViewModel.newsData.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellID) as? NewsTableViewCell else {
             return UITableViewCell()
         }
-        let dataForDisplay = newsViewModel.newsData[indexPath.row]
+        let dataForDisplay = newsListViewModel.newsData[indexPath.row]
         cell.newsTitle.text = dataForDisplay.title
         cell.newsDescription.text = dataForDisplay.description
-        
         if let imageURL = URL(string: dataForDisplay.urlToImage) {
             DispatchQueue.global().async {
                 let data = try? Data(contentsOf: imageURL)
@@ -73,28 +71,27 @@ class NewsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let newsDeatilViewController = NewsDetailViewController()
-        let newsDetailPresneter = NewsDetailPresenter()
-        let data = newsViewModel.newsData[indexPath.row]
-        newsDetailPresneter.newsDetailData = data
-        newsDeatilViewController.newsPresenter = newsDetailPresneter
+        let newsDetailViewModel = NewsDetailViewModel()
+        let data = newsListViewModel.newsData[indexPath.row]
+        newsDetailViewModel.newsDetailData = data
+        newsDeatilViewController.newsDetailViewModel = newsDetailViewModel
         navigationController?.pushViewController(newsDeatilViewController, animated: true)
-        
     }
     
     //MARK: Funkcija za postavljanje indikatora
     func createActivityIndicator() {
-        let loadingObserver = newsViewModel.loaderControll
+        let loadingObserver = newsListViewModel.loaderControll
         loadingObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] (event) in
-                
                 if (event) {
                     self.indicator.center = self.view.center
                     self.indicator.color = UIColor.red
                     self.view.addSubview(self.indicator)
                     self.indicator.startAnimating()
-                } else {
+                }
+                else {
                     self.indicator.stopAnimating()
                 }
             })
@@ -102,10 +99,10 @@ class NewsTableViewController: UITableViewController {
     }
     
     func isDataReady(){
-        let observer = newsViewModel.dataIsReady
-        observer
+        let dataObserver = newsListViewModel.dataIsReady
+        dataObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-        .observeOn(MainScheduler.instance)
+            .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] event in
                 if event {
                     self.tableView.reloadData()
@@ -114,23 +111,3 @@ class NewsTableViewController: UITableViewController {
             .disposed(by: disposeBag)
         }
     }
-
-//MARK: extensions
-//extension NewsTableViewController: NewsView {
-//    func refreshNews() {
-//        tableView.reloadData()
-//    }
-//    
-//    func setEmptyUsers() {
-//        tableView.isHidden = true
-//    }
-//    
-//    func startLoading() {
-//        indicator.startAnimating()
-//    }
-//    
-//    func finishLoading() {
-//        indicator.stopAnimating()
-//    }
-//}
-

@@ -10,7 +10,7 @@ import UIKit
 
 class NewsDetailViewController: UIViewController {
     //MARK: varijable
-    var newsPresenter: NewsDetailPresenter!
+    var newsDetailViewModel: NewsDetailViewModel!
     
     var newsImage: UIImageView = {
         let imageView = UIImageView()
@@ -48,7 +48,7 @@ class NewsDetailViewController: UIViewController {
     //MARK: layout postavke
      func addSubViews() {
         view.addSubview(newsImage)
-        if let imageURL = URL(string: newsPresenter.newsDetailData.urlToImage) {
+        if let imageURL = URL(string: newsDetailViewModel.newsDetailData.urlToImage) {
             DispatchQueue.global().async {
                 let data = try? Data(contentsOf: imageURL)
                 if let data = data {
@@ -65,7 +65,7 @@ class NewsDetailViewController: UIViewController {
         newsImage.heightAnchor.constraint(equalToConstant: 300).isActive = true
         
         view.addSubview(newsTitle)
-        newsTitle.text = newsPresenter.newsDetailData.title
+        newsTitle.text = newsDetailViewModel.newsDetailData.title
         newsTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 8).isActive = true
         newsTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -8).isActive = true
         newsTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 308).isActive = true
@@ -73,23 +73,16 @@ class NewsDetailViewController: UIViewController {
         
       
         view.addSubview(newsDescription)
-        newsDescription.text = newsPresenter.newsDetailData.description
+        newsDescription.text = newsDetailViewModel.newsDetailData.description
         newsDescription.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 8).isActive = true
         newsDescription.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -8).isActive = true
         newsDescription.topAnchor.constraint(equalTo: newsTitle.bottomAnchor, constant: 8).isActive = true
         newsDescription.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        navigationItem.title = newsPresenter.newsDetailData.title
+        navigationItem.title = newsDetailViewModel.newsDetailData.title
     }
-//    deinit {
-//        print("AJMO no memory leaks")
-//    }
    
 }
-
-extension NewsDetailViewController: NewsDetailView{
-}
-
 
 
 
