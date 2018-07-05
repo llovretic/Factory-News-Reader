@@ -22,10 +22,10 @@ class NewsTableViewController: UITableViewController {
         super.viewDidLoad()
         navigationItem.title = "Factory"
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: cellID)
-        initialzeLoaderObservable()
-        newsListViewModel.initialzeObservableDataAPI().disposed(by: disposeBag)
-        initialzeDataObservable()
-        intializeRefreshControl()
+        initializeLoaderObservable()
+        newsListViewModel.initializeObservableDataAPI().disposed(by: disposeBag)
+        initializeDataObservable()
+        initializeRefreshControl()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -72,7 +72,7 @@ class NewsTableViewController: UITableViewController {
     }
     
     //MARK: Funkcija za postavljanje indikatora
-    func initialzeLoaderObservable() {
+    func initializeLoaderObservable() {
         let loadingObserver = newsListViewModel.loaderControll
         loadingObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
@@ -91,7 +91,7 @@ class NewsTableViewController: UITableViewController {
             .disposed(by: disposeBag)
     }
     
-    func initialzeDataObservable(){
+    func initializeDataObservable(){
         let dataObserver = newsListViewModel.dataIsReady
         dataObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
@@ -108,7 +108,7 @@ class NewsTableViewController: UITableViewController {
         newsListViewModel.downloadTrigger.onNext(true)
     }
 
-    func intializeRefreshControl() {
+    func initializeRefreshControl() {
         refresher = UIRefreshControl()
         tableView.addSubview(refresher)
         refresher.tintColor = UIColor.red

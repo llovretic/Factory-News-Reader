@@ -8,17 +8,7 @@
 
 import Foundation
 
-protocol NewsDetailView {
-}
-
 class NewsDetailViewModel {
-    
-    fileprivate var newsDetailView: NewsDetailView?
-    
     var newsDetailData: NewsViewData!
-    
-    func attachView(_ view: NewsDetailView){
-        newsDetailView = view
-    }
 }
 

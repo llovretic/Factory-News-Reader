@@ -10,12 +10,6 @@ import Foundation
 import UIKit
 import RxSwift
 
-struct NewsViewData{
-    let title: String
-    let description: String
-    let urlToImage: String
-}
-
 class NewsListViewModel {
     
     fileprivate let newsService: APIService
@@ -29,7 +23,7 @@ class NewsListViewModel {
         self.newsService = newsService
     }
     
-    func initialzeObservableDataAPI() -> Disposable{
+    func initializeObservableDataAPI() -> Disposable{
         self.loaderControll.onNext(true)
         let downloadObserver = downloadTrigger.flatMap { [unowned self] (_) -> Observable<[Article]> in
             return self.newsService.observableFetchData()
