@@ -16,6 +16,7 @@ class NewsListViewModel {
     let dataIsReady = PublishSubject<Bool>()
     let loaderControll = PublishSubject<Bool>()
     let downloadTrigger = PublishSubject<Bool>()
+    let errorOccure = PublishSubject<Bool>()
     var newsData: [NewsViewData] = []
     var successDownloadTime: Date?
     
@@ -24,23 +25,32 @@ class NewsListViewModel {
     }
     
     func initializeObservableDataAPI() -> Disposable{
-        self.loaderControll.onNext(true)
         let downloadObserver = downloadTrigger.flatMap { [unowned self] (_) -> Observable<[Article]> in
+            self.loaderControll.onNext(true)
             return self.newsService.observableFetchData()
         }
         return downloadObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .observeOn(MainScheduler.instance)
-            .map({ (articles)  -> [NewsViewData] in
-                return articles.map { (news) -> NewsViewData in
+            .map({ (articles)  -> DataAndErrorWrapper in
+                let data =  articles.map { (news) -> NewsViewData in
                     return NewsViewData(title: news.title, description: news.description, urlToImage: news.urlToImage)
                 }
+                return DataAndErrorWrapper(data: data, error: nil)
+                
             })
-            .subscribe(onNext:{ [unowned self]  (articles) in
-                self.dataIsReady.onNext(true)
-                self.loaderControll.onNext(false)
-                self.newsData = articles
-                self.successDownloadTime = Date()
+            .catchError({ (error) -> Observable<DataAndErrorWrapper> in
+                return Observable.just(DataAndErrorWrapper(data: [], error: error.localizedDescription))
+            })
+            .subscribe(onNext:{ [unowned self]  (wrapper) in
+                if wrapper.error == nil {
+                    self.dataIsReady.onNext(true)
+                    self.loaderControll.onNext(false)
+                    self.newsData = wrapper.data
+                    self.successDownloadTime = Date()
+                }else {
+                    self.errorOccure.onNext(true)
+                }
             })
        
         

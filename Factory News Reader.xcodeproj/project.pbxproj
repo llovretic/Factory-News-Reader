@@ -21,6 +21,7 @@
 		47C18E6120CACFAB004327AD /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C18E6020CACFAB004327AD /* Model.swift */; };
 		47C909E420E59C9300D45D51 /* NewsDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C909E320E59C9300D45D51 /* NewsDetailViewModel.swift */; };
 		80BBAB8BFCADF320EFCFA4F3 /* Pods_Factory_News_Reader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 578B08EAB34460460D13F3EC /* Pods_Factory_News_Reader.framework */; };
+		87FAF60920EF6A0000D06B4D /* DataAndErrorWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FAF60820EF6A0000D06B4D /* DataAndErrorWrapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		47C909E320E59C9300D45D51 /* NewsDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsDetailViewModel.swift; sourceTree = "<group>"; };
 		48929E638AB7DC05DEFCF44F /* Pods-Factory News Reader.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Factory News Reader.release.xcconfig"; path = "Pods/Target Support Files/Pods-Factory News Reader/Pods-Factory News Reader.release.xcconfig"; sourceTree = "<group>"; };
 		578B08EAB34460460D13F3EC /* Pods_Factory_News_Reader.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Factory_News_Reader.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		87FAF60820EF6A0000D06B4D /* DataAndErrorWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAndErrorWrapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +148,7 @@
 			children = (
 				47BCA68820D91C7A00619C09 /* APIService.swift */,
 				47C18E6020CACFAB004327AD /* Model.swift */,
+				87FAF60820EF6A0000D06B4D /* DataAndErrorWrapper.swift */,
 				47393A7C20EE514F00E4C75D /* NewsModel.swift */,
 			);
 			path = Model;
@@ -313,6 +316,7 @@
 				47BCA68920D91C7A00619C09 /* APIService.swift in Sources */,
 				47C909E420E59C9300D45D51 /* NewsDetailViewModel.swift in Sources */,
 				476AD2DC20CC281E0023FA6B /* NewsDetailViewController.swift in Sources */,
+				87FAF60920EF6A0000D06B4D /* DataAndErrorWrapper.swift in Sources */,
 				47393A7D20EE514F00E4C75D /* NewsModel.swift in Sources */,
 				475F883620CA67F000A48C8C /* NewsTableViewController.swift in Sources */,
 				475F883420CA67F000A48C8C /* AppDelegate.swift in Sources */,

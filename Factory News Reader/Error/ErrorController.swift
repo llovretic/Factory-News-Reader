@@ -10,15 +10,15 @@ import UIKit
 
 class ErrorController: UIAlertController {
     //MARK: postavljanje alerta
-    class func alert(title: String, message: String) -> Void
+    class func alert(viewToPresent: UIViewController, title: String, message: String) -> Void
     {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
-        let action = UIAlertAction(title: "U redu", style: .default) { (action:UIAlertAction!) in
-            // PITATI U PETAK KAKO BI KORISTILI getData() U ALERTU NAKON CLICKA NA BUTtON
-        }
-        
+        let action = UIAlertAction(title: "U redu", style: .default)
+//        { (action:UIAlertAction!) in
+//
+//        }
         alert.addAction(action)
-        alert.present(alert, animated: true, completion:nil)
+        viewToPresent.present(alert, animated: true, completion:nil)
     }
 }

@@ -9,10 +9,11 @@
 import Foundation
 import Alamofire
 import RxSwift
+import RxCocoa
 
 class APIService {
-//    let url = "https://newsapi.org/v1/articles?apiKey=6946d0c07a1c4555a4186bfcade76398&sortBy=top&source=bbc-news"
-    let url = "https://newsapi.org/v1/articles?apiKey=91f05f55e0e441699553b373b30eea61&sortBy=top&source=bbc-news"
+    let url = "https://newsapi.org/v1/articles?apiKey=6946d0c07a1c4555a4186bfcade76398&sortBy=top&source=bbc-news"
+//    let url = "https://newsapi.org/v1/articles?apiKey=91f05f55e0e441699553b373b30eea61&sortBy=top&source=bbc-new"
     
     //MARK: Funkcija za skidanje podataka
     func observableFetchData() -> Observable<[Article]> {
@@ -33,12 +34,12 @@ class APIService {
                             observer.onCompleted()
                         }
                             
-                        catch {
-                            
+                        catch let error{
+                            observer.onError(error)
                         }
                         
                     case .failure(let error):
-                        print(error)
+                        observer.onError(error)
                     }
             }
             return Disposables.create {

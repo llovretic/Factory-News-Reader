@@ -26,6 +26,7 @@ class NewsTableViewController: UITableViewController {
         newsListViewModel.initializeObservableDataAPI().disposed(by: disposeBag)
         initializeDataObservable()
         initializeRefreshControl()
+        initializeErrorObservable()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -82,10 +83,12 @@ class NewsTableViewController: UITableViewController {
                     self.indicator.center = self.view.center
                     self.indicator.color = UIColor.red
                     self.view.addSubview(self.indicator)
+                    self.view.bringSubview(toFront: self.indicator)
                     self.indicator.startAnimating()
                 }
                 else {
                     self.indicator.stopAnimating()
+                    self.indicator.removeFromSuperview()
                 }
             })
             .disposed(by: disposeBag)
@@ -104,6 +107,24 @@ class NewsTableViewController: UITableViewController {
             })
             .disposed(by: disposeBag)
     }
+    
+    func initializeErrorObservable() {
+        let errorObserver = newsListViewModel.errorOccure
+            errorObserver
+            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { (event) in
+                if event {
+                   ErrorController.alert(viewToPresent: self, title: "Greška!", message: "Ups, došlo je do pogreške")
+                    self.refresher.endRefreshing()
+                    self.indicator.stopAnimating()
+                    self.indicator.hidesWhenStopped = true
+                    self.refresher.isHidden = true
+                }
+            })
+        .disposed(by: disposeBag)
+    }
+    
     @objc func refreshAction(){
         newsListViewModel.downloadTrigger.onNext(true)
     }
