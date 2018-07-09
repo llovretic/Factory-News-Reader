@@ -16,7 +16,7 @@ class NewsListViewController: UITableViewController {
     let disposeBag = DisposeBag()
     let cellID = "CellID"
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
-    fileprivate let newsListViewModel = NewsListViewModel(newsService: APIService())
+    var newsListViewModel = NewsListViewModel(newsService: APIService())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +31,14 @@ class NewsListViewController: UITableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         newsListViewModel.checkingHowOldIsData()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if self.isMovingToParentViewController {
+            
+        }
+        
     }
     
     //MARK: Funkcije za posatavljanje tableViewa

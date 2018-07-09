@@ -10,21 +10,25 @@ import UIKit
 
 class AppCoordinator: Coordinator{
     
-    func start(){
-        let coordinator = ListCoordinator(navigationController: navigationController)
-        coordinator.start()
-        childCoordinators.append(coordinator)
+    var childCoordinators: [Coordinator] = []
+    var presenter: UINavigationController
+    private let controller: NewsListViewController
+    
+    init(presneter: UINavigationController){
+        self.presenter = presneter
+        let listController = NewsListViewController()
+        let viewModel = NewsListViewModel(newsService: APIService())
+        listController.newsListViewModel = viewModel
+        self.controller = listController
     }
     
-    func listCoordinatorCompleted(coordinator: ListCoordinator){
-        if let index = childCoordinators.index(where: { $0 === coordinator}){
-            childCoordinators.remove(at: index)
-        }
-    }
-        
-    func detailsCoordinatorCompleted(coordinator: DetailsCoordinator){
-            if let index = childCoordinators.index(where: { $0 === coordinator}){
-                childCoordinators.remove(at: index)
-            }
+    func start(){
+//        controller.newsListViewModel
+        presenter.pushViewController(controller, animated: true)
+//        let coordinator = ListCoordinator(presenter: presenter)
+//        coordinator.start()
+//        childCoordinators.append(coordinator)
+//        print(childCoordinators)
     }
 }
+

@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let navigationController = UINavigationController()
         window?.rootViewController = navigationController
-        let coordinator = AppCoordinator(navigationController: navigationController)
+        let coordinator = AppCoordinator(presneter: navigationController)
         coordinator.start()
         self.coordinator = coordinator
         

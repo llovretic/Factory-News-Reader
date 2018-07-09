@@ -9,11 +9,17 @@
 import Foundation
 import UIKit
 
-class Coordinator {
-    var childCoordinators: [Coordinator] = []
-    weak var navigationController = UINavigationController()
-    
-    init(navigationController: UINavigationController?) {
-        self.navigationController = navigationController!
+public protocol Coordinator: class {
+    var childCoordinators: [Coordinator] {set get}
+    var presenter: UINavigationController {get set}
+    func start()
+}
+
+public extension Coordinator {
+    func addChildCoordinator(childCoordinator: Coordinator){
+        self.childCoordinators.append(childCoordinator)
+    }
+    func removeChildCoordinator(childCoordinator: Coordinator){
+        self.childCoordinators = self.childCoordinators.filter { $0 !== childCoordinator }
     }
 }
