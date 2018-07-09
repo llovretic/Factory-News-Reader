@@ -13,13 +13,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var navigationApperance = UINavigationBar.appearance()
+    var coordinator: Coordinator!
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
-        window?.rootViewController = UINavigationController(rootViewController: NewsTableViewController())
+        
+        let navigationController = UINavigationController()
+        window?.rootViewController = navigationController
+        let coordinator = AppCoordinator(navigationController: navigationController)
+        coordinator.start()
+        self.coordinator = coordinator
+        
         navigationApperance.tintColor = UIColor.white
         navigationApperance.barTintColor = UIColor.blue
         navigationApperance.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]

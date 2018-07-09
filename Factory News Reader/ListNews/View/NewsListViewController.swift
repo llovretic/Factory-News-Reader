@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 
 
-class NewsTableViewController: UITableViewController {
+class NewsListViewController: UITableViewController {
     //MARK: varijable
     var refresher: UIRefreshControl!
     let disposeBag = DisposeBag()
