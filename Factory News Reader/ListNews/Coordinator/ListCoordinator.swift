@@ -23,28 +23,31 @@ class ListCoordinator: Coordinator {
     }
     
     func start() {
-//        controller.newsListViewModel.
         presenter.pushViewController(controller, animated: true)
-//        let coordinator = ListCoordinator(navigationController: navigationController)
-//        coordinator.start()
-//        childCoordinators.append(coordinator)
     }
     
-//    func stop() {
-//        _ = navigationController?.popViewController(animated: true)
-//        appCoordinator?.listCoordinatorCompleted(coordinator: self)
-//    }
 }
 
 extension ListCoordinator: ListCoordinatorDelegate{
-    func newsListDidSelectNews(selectedNews: NewsViewData) {
-        
+    func openDetailNews(selectedNews: NewsViewData) {
+        let coordinator = DetailsCoordinator(presenter: presenter)
+        coordinator.parentCoordinatorDelegate = self
+        addChildCoordinator(childCoordinator: coordinator)
+        coordinator.start()
     }
     
     func viewControllerHasFinished() {
         childCoordinators.removeAll()
         parentCoordinatorDelegate?.childHasFinished(coordinator: self)
     }
+}
+
+extension ListCoordinator: ParentCoordinatorDelegate{
+    func childHasFinished(coordinator: Coordinator) {
+        removeChildCoordinator(childCoordinator: coordinator)
+    }
+    
+    
     
     
 }

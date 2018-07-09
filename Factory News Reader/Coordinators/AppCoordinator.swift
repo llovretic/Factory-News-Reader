@@ -13,22 +13,16 @@ class AppCoordinator: Coordinator{
     var childCoordinators: [Coordinator] = []
     var presenter: UINavigationController
     private let controller: NewsListViewController
-    
+
     init(presneter: UINavigationController){
         self.presenter = presneter
-        let listController = NewsListViewController()
-        let viewModel = NewsListViewModel(newsService: APIService())
-        listController.newsListViewModel = viewModel
-        self.controller = listController
+        self.controller = NewsListViewController()
+        
     }
     
     func start(){
-//        controller.newsListViewModel
+        let controller = NewsListViewController()
         presenter.pushViewController(controller, animated: true)
-//        let coordinator = ListCoordinator(presenter: presenter)
-//        coordinator.start()
-//        childCoordinators.append(coordinator)
-//        print(childCoordinators)
     }
 }
 

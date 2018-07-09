@@ -9,5 +9,5 @@
 import Foundation
 
 protocol ListCoordinatorDelegate: CoordinatorDelegate {
-    func newsListDidSelectNews(selectedNews: NewsViewData)
+    func openDetailNews(selectedNews: NewsViewData)
 }

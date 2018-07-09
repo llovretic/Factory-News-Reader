@@ -12,20 +12,19 @@ class DetailsCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
     var presenter: UINavigationController
     private let controller: NewsDetailViewController
+    weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
+
     
     init(presenter: UINavigationController) {
         self.presenter = presenter
         let detailsController = NewsDetailViewController()
+        let viewModel = NewsDetailViewModel()
+        detailsController.newsDetailViewModel = viewModel
         self.controller = detailsController
     }
     
     
     func start() {
-//        let coordinator = DetailsCoordinator(navigationController: navigationController)
-//        coordinator.start()
-//        childCoordinators.append(coordinator)
-        let viewController = NewsDetailViewController()
-        presenter.pushViewController(viewController, animated: true)
-        
+        presenter.pushViewController(controller, animated: true)
     }
 }
