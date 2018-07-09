@@ -46,8 +46,5 @@ extension ListCoordinator: ParentCoordinatorDelegate{
     func childHasFinished(coordinator: Coordinator) {
         removeChildCoordinator(childCoordinator: coordinator)
     }
-    
-    
-    
-    
+ 
 }

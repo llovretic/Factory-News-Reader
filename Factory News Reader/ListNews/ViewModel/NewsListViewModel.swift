@@ -19,6 +19,7 @@ class NewsListViewModel {
     let errorOccure = PublishSubject<Bool>()
     var newsData: [NewsViewData] = []
     var successDownloadTime: Date?
+    weak var listDelegate: ListCoordinatorDelegate?
     
     init(newsService: APIService){
         self.newsService = newsService

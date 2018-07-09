@@ -28,3 +28,8 @@ class DetailsCoordinator: Coordinator {
         presenter.pushViewController(controller, animated: true)
     }
 }
+extension DetailsCoordinator: ParentCoordinatorDelegate {
+    func childHasFinished(coordinator: Coordinator) {
+        removeChildCoordinator(childCoordinator: coordinator)
+    }
+}
