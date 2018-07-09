@@ -15,12 +15,3 @@ protocol CoordinatorDelegate: class {
 protocol ParentCoordinatorDelegate: class {
     func childHasFinished(coordinator: Coordinator)
 }
-
-//protocol ListCoordinatorDelegate: CoordinatorDelegate {
-//    func newsDataRecived(news: NewsViewData)
-//}
-//
-//protocol DetailCoordinatorDelegate: class {
-//    func openNews(withId: Int)
-//}
-

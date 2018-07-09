@@ -23,8 +23,13 @@ class DetailsCoordinator: Coordinator {
         self.controller = detailsController
     }
     
+    deinit {
+        print("deinit details coordinator")
+    }
+    
     
     func start() {
+        print("Details Coordinator is being used")
         presenter.pushViewController(controller, animated: true)
     }
 }

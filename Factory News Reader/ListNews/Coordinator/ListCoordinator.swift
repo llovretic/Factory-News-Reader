@@ -11,7 +11,7 @@ import UIKit
 class ListCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
     var presenter: UINavigationController
-    private let controller: NewsListViewController
+    let controller: NewsListViewController
     weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     
     init(presenter: UINavigationController){
@@ -22,7 +22,12 @@ class ListCoordinator: Coordinator {
         self.controller = listController
     }
     
+    deinit {
+        print("deinit list coordinator")
+    }
+    
     func start() {
+        print("List Coordinator is being used")
         presenter.pushViewController(controller, animated: true)
     }
     

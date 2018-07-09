@@ -21,7 +21,6 @@ class AppCoordinator: Coordinator{
     }
     
     func start(){
-        let controller = NewsListViewController()
         presenter.pushViewController(controller, animated: true)
     }
 }
