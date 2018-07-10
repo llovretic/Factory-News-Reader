@@ -17,14 +17,11 @@ class AppCoordinator: Coordinator{
     init(presneter: UINavigationController){
         self.presenter = presneter
         self.controller = ListCoordinator(presenter: presenter).controller
-        let coordinator = ListCoordinator(presenter: presenter)
-        coordinator.start()
-        coordinator.addChildCoordinator(childCoordinator: coordinator)
-        
     }
     
     func start(){
-        presenter.pushViewController(controller, animated: true)
-    }
+        let coordinator = ListCoordinator(presenter: presenter)
+        coordinator.start()
+        self.addChildCoordinator(childCoordinator: coordinator)    }
 }
 

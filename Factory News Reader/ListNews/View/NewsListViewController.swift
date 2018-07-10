@@ -36,7 +36,7 @@ class NewsListViewController: UITableViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if self.isMovingToParentViewController {
-            
+            newsListViewModel.listCoordinatorDelegate?.viewControllerHasFinished()
         }
         
     }
@@ -72,12 +72,7 @@ class NewsListViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let newsDeatilViewController = NewsDetailViewController()
-        let newsDetailViewModel = NewsDetailViewModel()
-        let data = newsListViewModel.newsData[indexPath.row]
-        newsDetailViewModel.newsDetailData = data
-        newsDeatilViewController.newsDetailViewModel = newsDetailViewModel
-        navigationController?.pushViewController(newsDeatilViewController, animated: true)
+        newsListViewModel.newsIsSelected(selectedNews: indexPath.row)
     }
     
     //MARK: Funkcija za postavljanje indikatora
@@ -144,3 +139,4 @@ class NewsListViewController: UITableViewController {
         refresher.addTarget(self, action: #selector(refreshAction), for: .valueChanged)
     }
 }
+

@@ -19,8 +19,8 @@ class NewsListViewModel {
     let errorOccure = PublishSubject<Bool>()
     var newsData: [NewsViewData] = []
     var successDownloadTime: Date?
-    weak var listDelegate: ListDelegate?
-    
+    weak var listCoordinatorDelegate: ListCoordinatorDelegate?
+
     init(newsService: APIService){
         self.newsService = newsService
     }
@@ -53,8 +53,6 @@ class NewsListViewModel {
                     self.errorOccure.onNext(true)
                 }
             })
-       
-        
     }
     
     func checkingHowOldIsData() {
@@ -69,6 +67,9 @@ class NewsListViewModel {
         } else {
             self.downloadTrigger.onNext(true)
         }
+    }
+    func newsIsSelected(selectedNews: Int){
+        self.listCoordinatorDelegate?.openDetailNews(selectedNews: newsData[selectedNews])
     }
 }
 

@@ -18,6 +18,7 @@ class ListCoordinator: Coordinator {
         self.presenter = presenter
         let listController = NewsListViewController()
         let viewModel = NewsListViewModel(newsService: APIService())
+        
         listController.newsListViewModel = viewModel
         self.controller = listController
     }
@@ -27,7 +28,7 @@ class ListCoordinator: Coordinator {
     }
     
     func start() {
-        print("List Coordinator is being used")
+        controller.newsListViewModel.listCoordinatorDelegate = self
         presenter.pushViewController(controller, animated: true)
     }
     
@@ -35,10 +36,11 @@ class ListCoordinator: Coordinator {
 
 extension ListCoordinator: ListCoordinatorDelegate{
     func openDetailNews(selectedNews: NewsViewData) {
-        let coordinator = DetailsCoordinator(presenter: presenter)
+        let coordinator = DetailsCoordinator(presenter: presenter, news: selectedNews)
         coordinator.parentCoordinatorDelegate = self
-        addChildCoordinator(childCoordinator: coordinator)
         coordinator.start()
+        self.addChildCoordinator(childCoordinator: coordinator)
+        
     }
     
     func viewControllerHasFinished() {
