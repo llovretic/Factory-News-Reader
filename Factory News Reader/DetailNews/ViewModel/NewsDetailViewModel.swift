@@ -9,6 +9,8 @@
 import Foundation
 
 class NewsDetailViewModel {
+    
+    weak var listCoordinatorDelegate: ListCoordinatorDelegate?
     var newsDetailData: NewsViewData!
 }
 

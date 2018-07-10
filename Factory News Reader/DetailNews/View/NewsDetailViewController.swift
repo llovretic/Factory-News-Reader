@@ -41,6 +41,12 @@ class NewsDetailViewController: UIViewController {
         view.backgroundColor = UIColor.white
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        if self.isMovingToParentViewController {
+            newsDetailViewModel.listCoordinatorDelegate?.viewControllerHasFinished()
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
