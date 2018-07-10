@@ -12,16 +12,16 @@ class AppCoordinator: Coordinator{
     
     var childCoordinators: [Coordinator] = []
     var presenter: UINavigationController
-    private let controller: NewsListViewController
 
     init(presneter: UINavigationController){
         self.presenter = presneter
-        self.controller = ListCoordinator(presenter: presenter).controller
     }
     
     func start(){
-        let coordinator = ListCoordinator(presenter: presenter)
+        let coordinator = ListNewsCoordinator(presenter: presenter)
         coordinator.start()
-        self.addChildCoordinator(childCoordinator: coordinator)    }
+        self.addChildCoordinator(childCoordinator: coordinator)
+        
+    }
 }
 

@@ -8,19 +8,18 @@
 
 import UIKit
 
-class ListCoordinator: Coordinator {
+class ListNewsCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
     var presenter: UINavigationController
-    let controller: NewsListViewController
+    let controller: ListNewsViewController
     weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     
     init(presenter: UINavigationController){
         self.presenter = presenter
-        let listController = NewsListViewController()
-        let viewModel = NewsListViewModel(newsService: APIService())
-        
-        listController.newsListViewModel = viewModel
-        self.controller = listController
+        let listNewsController = ListNewsViewController()
+        let listNewsviewModel = ListNewsViewModel(newsService: APIRepository())
+        listNewsController.listNewsViewModel = listNewsviewModel
+        self.controller = listNewsController
     }
     
     deinit {
@@ -28,18 +27,19 @@ class ListCoordinator: Coordinator {
     }
     
     func start() {
-        controller.newsListViewModel.listCoordinatorDelegate = self
+        controller.listNewsViewModel.listNewsCoordinatorDelegate = self
         presenter.pushViewController(controller, animated: true)
     }
     
 }
 
-extension ListCoordinator: ListCoordinatorDelegate{
-    func openDetailNews(selectedNews: NewsViewData) {
-        let coordinator = DetailsCoordinator(presenter: presenter, news: selectedNews)
+extension ListNewsCoordinator: ListNewsCoordinatorDelegate{
+    func openSingleNews(selectedNews: NewsData) {
+        let coordinator = SingleNewsCoordinator(presenter: presenter, news: selectedNews)
         coordinator.parentCoordinatorDelegate = self
         coordinator.start()
         self.addChildCoordinator(childCoordinator: coordinator)
+        print(self.childCoordinators)
         
     }
     
@@ -49,7 +49,7 @@ extension ListCoordinator: ListCoordinatorDelegate{
     }
 }
 
-extension ListCoordinator: ParentCoordinatorDelegate{
+extension ListNewsCoordinator: ParentCoordinatorDelegate{
     func childHasFinished(coordinator: Coordinator) {
         removeChildCoordinator(childCoordinator: coordinator)
     }

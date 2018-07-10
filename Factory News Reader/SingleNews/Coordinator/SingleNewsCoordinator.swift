@@ -8,20 +8,20 @@
 
 import UIKit
 
-class DetailsCoordinator: Coordinator {
+class SingleNewsCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
     var presenter: UINavigationController
-    let controller: NewsDetailViewController
+    let singleNewsController: SingleNewsViewController
     weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
 
     
-    init(presenter: UINavigationController, news: NewsViewData) {
+    init(presenter: UINavigationController, news: NewsData) {
         self.presenter = presenter
-        let detailsController = NewsDetailViewController()
-        let viewModel = NewsDetailViewModel()
-        viewModel.newsDetailData = news
-        detailsController.newsDetailViewModel = viewModel
-        self.controller = detailsController
+        let singleNewsController = SingleNewsViewController()
+        let singleNewsViewModel = SingleNewsViewModel()
+        singleNewsViewModel.newsDetailData = news
+        singleNewsController.singlelNewsViewModel = singleNewsViewModel
+        self.singleNewsController = singleNewsController
         
     }
     
@@ -31,10 +31,10 @@ class DetailsCoordinator: Coordinator {
     
     
     func start() {
-        presenter.pushViewController(controller, animated: true)
+        presenter.pushViewController(singleNewsController, animated: true)
     }
 }
-extension DetailsCoordinator: ParentCoordinatorDelegate {
+extension SingleNewsCoordinator: ParentCoordinatorDelegate {
     func childHasFinished(coordinator: Coordinator) {
         removeChildCoordinator(childCoordinator: coordinator)
     }

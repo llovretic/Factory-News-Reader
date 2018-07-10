@@ -9,6 +9,6 @@
 import Foundation
 
 struct DataAndErrorWrapper {
-    var data: [NewsViewData]
+    var data: [NewsData]
     var error: String?
 }

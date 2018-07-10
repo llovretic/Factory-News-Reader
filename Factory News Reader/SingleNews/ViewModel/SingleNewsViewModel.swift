@@ -8,9 +8,9 @@
 
 import Foundation
 
-class NewsDetailViewModel {
+class SingleNewsViewModel {
     
-    weak var listCoordinatorDelegate: ListCoordinatorDelegate?
-    var newsDetailData: NewsViewData!
+    weak var listNewsCoordinatorDelegate: ListNewsCoordinatorDelegate?
+    var newsDetailData: NewsData!
 }
 

@@ -10,18 +10,18 @@ import Foundation
 import UIKit
 import RxSwift
 
-class NewsListViewModel {
+class ListNewsViewModel {
     
-    fileprivate let newsService: APIService
+    fileprivate let newsService: APIRepository
     let dataIsReady = PublishSubject<Bool>()
     let loaderControll = PublishSubject<Bool>()
     let downloadTrigger = PublishSubject<Bool>()
-    let errorOccure = PublishSubject<Bool>()
-    var newsData: [NewsViewData] = []
+    let errorOccured = PublishSubject<Bool>()
+    var newsData: [NewsData] = []
     var successDownloadTime: Date?
-    weak var listCoordinatorDelegate: ListCoordinatorDelegate?
+    weak var listNewsCoordinatorDelegate: ListNewsCoordinatorDelegate?
 
-    init(newsService: APIService){
+    init(newsService: APIRepository){
         self.newsService = newsService
     }
     
@@ -34,8 +34,8 @@ class NewsListViewModel {
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .observeOn(MainScheduler.instance)
             .map({ (articles)  -> DataAndErrorWrapper in
-                let data =  articles.map { (news) -> NewsViewData in
-                    return NewsViewData(title: news.title, description: news.description, urlToImage: news.urlToImage)
+                let data =  articles.map { (news) -> NewsData in
+                    return NewsData(title: news.title, description: news.description, urlToImage: news.urlToImage)
                 }
                 return DataAndErrorWrapper(data: data, error: nil)
                 
@@ -50,7 +50,7 @@ class NewsListViewModel {
                     self.newsData = wrapper.data
                     self.successDownloadTime = Date()
                 }else {
-                    self.errorOccure.onNext(true)
+                    self.errorOccured.onNext(true)
                 }
             })
     }
@@ -69,7 +69,7 @@ class NewsListViewModel {
         }
     }
     func newsIsSelected(selectedNews: Int){
-        self.listCoordinatorDelegate?.openDetailNews(selectedNews: newsData[selectedNews])
+        self.listNewsCoordinatorDelegate?.openSingleNews(selectedNews: newsData[selectedNews])
     }
 }
 

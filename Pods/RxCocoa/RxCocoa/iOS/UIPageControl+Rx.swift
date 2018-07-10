@@ -15,15 +15,15 @@ extension Reactive where Base: UIPageControl {
     
     /// Bindable sink for `currentPage` property.
     public var currentPage: Binder<Int> {
-        return Binder(self.base) { controller, page in
-            controller.currentPage = page
+        return Binder(self.base) { singleNewsController, page in
+            singleNewsController.currentPage = page
         }
     }
     
     /// Bindable sink for `numberOfPages` property.
     public var numberOfPages: Binder<Int> {
-        return Binder(self.base) { controller, page in
-            controller.numberOfPages = page
+        return Binder(self.base) { singleNewsController, page in
+            singleNewsController.numberOfPages = page
         }
     }
     

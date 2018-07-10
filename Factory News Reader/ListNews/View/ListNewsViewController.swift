@@ -10,47 +10,51 @@ import UIKit
 import RxSwift
 
 
-class NewsListViewController: UITableViewController {
+class ListNewsViewController: UITableViewController {
     //MARK: varijable
     var refresher: UIRefreshControl!
     let disposeBag = DisposeBag()
-    let cellID = "CellID"
-    let indicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
-    var newsListViewModel: NewsListViewModel!
+    let cellIdentifier = "CellID"
+    let loadingIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
+    var listNewsViewModel: ListNewsViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Factory"
-        tableView.register(NewsListViewCell.self, forCellReuseIdentifier: cellID)
+        tableView.register(ListNewsViewCell.self, forCellReuseIdentifier: cellIdentifier)
         initializeLoaderObservable()
-        newsListViewModel.initializeObservableDataAPI().disposed(by: disposeBag)
+        listNewsViewModel.initializeObservableDataAPI().disposed(by: disposeBag)
         initializeDataObservable()
         initializeRefreshControl()
         initializeErrorObservable()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        newsListViewModel.checkingHowOldIsData()
+        listNewsViewModel.checkingHowOldIsData()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if self.isMovingToParentViewController {
-            newsListViewModel.listCoordinatorDelegate?.viewControllerHasFinished()
+        if self.isMovingFromParentViewController {
+            listNewsViewModel.listNewsCoordinatorDelegate?.viewControllerHasFinished()
         }
-        
+    
+    }
+    
+    deinit {
+        print("Single News deinit")
     }
     
     //MARK: Funkcije za posatavljanje tableViewa
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return newsListViewModel.newsData.count
+        return listNewsViewModel.newsData.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellID) as? NewsListViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? ListNewsViewCell else {
             return UITableViewCell()
         }
-        let dataForDisplay = newsListViewModel.newsData[indexPath.row]
+        let dataForDisplay = listNewsViewModel.newsData[indexPath.row]
         cell.newsTitle.text = dataForDisplay.title
         cell.newsDescription.text = dataForDisplay.description
         if let imageURL = URL(string: dataForDisplay.urlToImage) {
@@ -72,33 +76,33 @@ class NewsListViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        newsListViewModel.newsIsSelected(selectedNews: indexPath.row)
+        listNewsViewModel.newsIsSelected(selectedNews: indexPath.row)
     }
     
     //MARK: Funkcija za postavljanje indikatora
     func initializeLoaderObservable() {
-        let loadingObserver = newsListViewModel.loaderControll
+        let loadingObserver = listNewsViewModel.loaderControll
         loadingObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] (event) in
                 if (event) {
-                    self.indicator.center = self.view.center
-                    self.indicator.color = UIColor.red
-                    self.view.addSubview(self.indicator)
-                    self.view.bringSubview(toFront: self.indicator)
-                    self.indicator.startAnimating()
+                    self.loadingIndicator.center = self.view.center
+                    self.loadingIndicator.color = UIColor.red
+                    self.view.addSubview(self.loadingIndicator)
+                    self.view.bringSubview(toFront: self.loadingIndicator)
+                    self.loadingIndicator.startAnimating()
                 }
                 else {
-                    self.indicator.stopAnimating()
-                    self.indicator.removeFromSuperview()
+                    self.loadingIndicator.stopAnimating()
+                    self.loadingIndicator.removeFromSuperview()
                 }
             })
             .disposed(by: disposeBag)
     }
     
     func initializeDataObservable(){
-        let dataObserver = newsListViewModel.dataIsReady
+        let dataObserver = listNewsViewModel.dataIsReady
         dataObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .observeOn(MainScheduler.instance)
@@ -112,7 +116,7 @@ class NewsListViewController: UITableViewController {
     }
     
     func initializeErrorObservable() {
-        let errorObserver = newsListViewModel.errorOccure
+        let errorObserver = listNewsViewModel.errorOccured
             errorObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .observeOn(MainScheduler.instance)
@@ -120,8 +124,8 @@ class NewsListViewController: UITableViewController {
                 if event {
                    ErrorController.alert(viewToPresent: self, title: "Greška!", message: "Ups, došlo je do pogreške")
                     self.refresher.endRefreshing()
-                    self.indicator.stopAnimating()
-                    self.indicator.hidesWhenStopped = true
+                    self.loadingIndicator.stopAnimating()
+                    self.loadingIndicator.hidesWhenStopped = true
                     self.refresher.isHidden = true
                 }
             })
@@ -129,7 +133,7 @@ class NewsListViewController: UITableViewController {
     }
     
     @objc func refreshAction(){
-        newsListViewModel.downloadTrigger.onNext(true)
+        listNewsViewModel.downloadTrigger.onNext(true)
     }
 
     func initializeRefreshControl() {
