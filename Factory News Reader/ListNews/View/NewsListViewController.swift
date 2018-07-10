@@ -16,7 +16,7 @@ class NewsListViewController: UITableViewController {
     let disposeBag = DisposeBag()
     let cellID = "CellID"
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
-    var newsListViewModel = NewsListViewModel(newsService: APIService())
+    var newsListViewModel: NewsListViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()

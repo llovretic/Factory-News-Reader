@@ -11,3 +11,7 @@ import Foundation
 protocol ListCoordinatorDelegate: CoordinatorDelegate {
     func openDetailNews(selectedNews: NewsViewData)
 }
+
+protocol ListDelegate: class {
+    func articlesDataRecived(articles: NewsViewData)
+}

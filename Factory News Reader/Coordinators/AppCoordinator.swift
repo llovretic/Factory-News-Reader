@@ -16,7 +16,10 @@ class AppCoordinator: Coordinator{
 
     init(presneter: UINavigationController){
         self.presenter = presneter
-        self.controller = NewsListViewController()
+        self.controller = ListCoordinator(presenter: presenter).controller
+        let coordinator = ListCoordinator(presenter: presenter)
+        coordinator.start()
+        coordinator.addChildCoordinator(childCoordinator: coordinator)
         
     }
     

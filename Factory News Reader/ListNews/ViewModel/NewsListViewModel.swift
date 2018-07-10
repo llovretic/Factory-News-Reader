@@ -19,7 +19,7 @@ class NewsListViewModel {
     let errorOccure = PublishSubject<Bool>()
     var newsData: [NewsViewData] = []
     var successDownloadTime: Date?
-    weak var listDelegate: ListCoordinatorDelegate?
+    weak var listDelegate: ListDelegate?
     
     init(newsService: APIService){
         self.newsService = newsService
@@ -56,7 +56,6 @@ class NewsListViewModel {
        
         
     }
-    
     
     func checkingHowOldIsData() {
         let currentTime = Date()
