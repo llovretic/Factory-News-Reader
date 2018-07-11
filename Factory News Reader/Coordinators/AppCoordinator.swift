@@ -18,11 +18,12 @@ class AppCoordinator: Coordinator{
     }
     
     func start(){
-        let coordinator = ListNewsCoordinator(presenter: presenter)
-        coordinator.start()
-        self.addChildCoordinator(childCoordinator: coordinator)
-        print(self.childCoordinators)
+        let tabBarCoordinator = BaseCoordinator(presenter: presenter, services: APIRepository())
+        tabBarCoordinator.start()
         
+//        let coordinator = ListNewsCoordinator(presenter: presenter)
+//        coordinator.start()
+//        self.addChildCoordinator(childCoordinator: coordinator)
     }
 }
 

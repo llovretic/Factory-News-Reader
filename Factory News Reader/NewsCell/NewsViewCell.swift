@@ -9,7 +9,7 @@
 import UIKit
 
 
-class ListNewsViewCell: UITableViewCell {
+class NewsViewCell: UITableViewCell {
     //MARK: varijable
     var newsImage: UIImageView = {
         let imageView = UIImageView()

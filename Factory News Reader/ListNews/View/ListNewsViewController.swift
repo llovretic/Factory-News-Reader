@@ -21,7 +21,7 @@ class ListNewsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Factory"
-        tableView.register(ListNewsViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(NewsViewCell.self, forCellReuseIdentifier: cellIdentifier)
         initializeLoaderObservable()
         listNewsViewModel.initializeObservableDataAPI().disposed(by: disposeBag)
         initializeDataObservable()
@@ -52,7 +52,7 @@ class ListNewsViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? ListNewsViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? NewsViewCell else {
             return UITableViewCell()
         }
         let dataForDisplay = listNewsViewModel.newsData[indexPath.row]
