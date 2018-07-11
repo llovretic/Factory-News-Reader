@@ -36,6 +36,7 @@ class ListNewsViewController: UITableViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if self.isMovingFromParentViewController {
+            print("Moving Back to ParentViewController! list")
             listNewsViewModel.listNewsCoordinatorDelegate?.viewControllerHasFinished()
         }
     

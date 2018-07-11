@@ -70,6 +70,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4734D04520F6203A002161D8 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				473D6BC520F336B000C44B60 /* Coordinators */,
+				4734D04720F62061002161D8 /* ViewModel */,
+				4734D04620F62042002161D8 /* View */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		4734D04620F62042002161D8 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		4734D04720F62061002161D8 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		473D6BC520F336B000C44B60 /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
@@ -118,7 +142,7 @@
 		475F883220CA67F000A48C8C /* Factory News Reader */ = {
 			isa = PBXGroup;
 			children = (
-				473D6BC520F336B000C44B60 /* Coordinators */,
+				4734D04520F6203A002161D8 /* Base */,
 				476B450F20E7BFF2003B547C /* Error */,
 				47C909E620E5C42200D45D51 /* Model */,
 				476B450B20E7BF63003B547C /* ListNews */,
@@ -333,12 +357,16 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Factory News Reader/Pods-Factory News Reader-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 			);

@@ -43,6 +43,7 @@ class SingleNewsViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         if self.isMovingFromParentViewController {
+            print("Moving Back to ParentViewController! single")
             singlelNewsViewModel.listNewsCoordinatorDelegate?.viewControllerHasFinished()
         }
     }

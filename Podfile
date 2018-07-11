@@ -7,6 +7,7 @@ target 'Factory News Reader' do
     pod 'Alamofire'
     pod 'RxSwift'
     pod 'RxCocoa'
+    pod 'RealmSwift'
 
 end
 

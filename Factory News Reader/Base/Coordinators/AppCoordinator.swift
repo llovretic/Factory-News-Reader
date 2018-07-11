@@ -21,6 +21,7 @@ class AppCoordinator: Coordinator{
         let coordinator = ListNewsCoordinator(presenter: presenter)
         coordinator.start()
         self.addChildCoordinator(childCoordinator: coordinator)
+        print(self.childCoordinators)
         
     }
 }
