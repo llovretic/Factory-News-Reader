@@ -20,7 +20,6 @@ class ListNewsViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "Factory"
         tableView.register(NewsViewCell.self, forCellReuseIdentifier: cellIdentifier)
         initializeLoaderObservable()
         listNewsViewModel.initializeObservableDataAPI().disposed(by: disposeBag)
@@ -56,15 +55,14 @@ class ListNewsViewController: UITableViewController {
             return UITableViewCell()
         }
         let dataForDisplay = listNewsViewModel.newsData[indexPath.row]
-        cell.newsTitle.text = dataForDisplay.title
-        cell.newsDescription.text = dataForDisplay.description
+        cell.newsTitleLabel.text = dataForDisplay.title
         if let imageURL = URL(string: dataForDisplay.urlToImage) {
             DispatchQueue.global().async {
                 let data = try? Data(contentsOf: imageURL)
                 if let data = data {
                     let image = UIImage(data: data)
                     DispatchQueue.main.async {
-                        cell.newsImage.image = image
+                        cell.newsImageView.image = image
                     }
                 }
             }

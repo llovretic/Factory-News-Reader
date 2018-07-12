@@ -8,30 +8,40 @@
 
 import UIKit
 
-class BaseCoordinator: Coordinator {
-    var childCoordinators: [Coordinator] = []
+class BaseCoordinator: Coordinator  {
     var presenter: UINavigationController
-    let service: APIRepository
+    var childCoordinators: [Coordinator] = []
     let controller: BaseViewController
+    weak var baseCoordinatorDelegate: BaseCoordinatorDelegate!
     
-    init(presenter: UINavigationController, services: APIRepository){
+    init(presenter: UINavigationController){
         self.presenter = presenter
-        self.service = services
         let baseViewController = BaseViewController()
         self.controller = baseViewController
+        
+        let favouriteNewsCoordinator = FavouriteNewsCoordinator(presenter: presenter)
+        let favouriteNewsNavigationController = createNavigationController(viewController: favouriteNewsCoordinator.controller, image: UIImage(named: "favouritesList")!, title: "FAVOURITES")
+    
+        
+        let listNewsCoordinator = ListNewsCoordinator(presenter: presenter)
+        let listNewsNavigationController = createNavigationController(viewController: listNewsCoordinator.controller, image: UIImage(named: "newsList")!, title: "NEWS")
+        
+
+        listNewsCoordinator.controller.listNewsViewModel.listNewsCoordinatorDelegate = listNewsCoordinator
+    
+        self.controller.setViewControllers([listNewsNavigationController,favouriteNewsNavigationController], animated: false)
     }
     
     func start() {
-        
         presenter.pushViewController(controller, animated: true)
-        
-//        let tabBarController = BaseViewController()
-//
-//        let listNewsCoordinator = ListNewsCoordinator(presenter: presenter)
-//        listNewsCoordinator.start()
-//
-//        let favouriteNewsCoordinator = FavouriteNewsCoordinator(presenter: presenter)
-//
-//        tabBarController.setViewControllers([listNewsCoordinator.controller, favouriteNewsCoordinator.controller], animated: false)
+    }
+    
+    func createNavigationController(viewController: UIViewController, image: UIImage, title: String) -> UINavigationController{
+        let viewController = viewController
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.tabBarItem.image = image
+        navigationController.tabBarItem.title = title
+        return navigationController
     }
 }
+

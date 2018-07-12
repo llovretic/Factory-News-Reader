@@ -11,15 +11,15 @@ import UIKit
 class FavouriteNewsCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
     var presenter: UINavigationController
-    let controller: ListNewsViewController
+    let controller: FavouriteNewsViewController
     weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     
     init(presenter: UINavigationController){
         self.presenter = presenter
-        let listNewsController = ListNewsViewController()
-        let listNewsviewModel = ListNewsViewModel(newsService: APIRepository())
-        listNewsController.listNewsViewModel = listNewsviewModel
-        self.controller = listNewsController
+        let favouriteNewsController = FavouriteNewsViewController()
+//        let listNewsviewModel = ListNewsViewModel(newsService: APIRepository())
+//        listNewsController.listNewsViewModel = listNewsviewModel
+        self.controller = favouriteNewsController
     }
     
     deinit {

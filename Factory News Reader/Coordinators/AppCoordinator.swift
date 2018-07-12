@@ -18,7 +18,7 @@ class AppCoordinator: Coordinator{
     }
     
     func start(){
-        let tabBarCoordinator = BaseCoordinator(presenter: presenter, services: APIRepository())
+        let tabBarCoordinator = BaseCoordinator(presenter: presenter)
         tabBarCoordinator.start()
         
 //        let coordinator = ListNewsCoordinator(presenter: presenter)

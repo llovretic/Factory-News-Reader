@@ -11,31 +11,32 @@ import UIKit
 
 class NewsViewCell: UITableViewCell {
     //MARK: varijable
-    var newsImage: UIImageView = {
+//    var urlToImage: String
+//    var title: String
+    
+    var newsImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        //        imageView.contentMode = .scaleAspectFit
+//        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
-    var newsTitle: UILabel = {
+    var newsTitleLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 18)
+        label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var newsDescription: UILabel = {
-        let label = UILabel()
-        label.font = .italicSystemFont(ofSize: 18)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    var favouritesButton: UIButton = {
+        let button = UIButton()
+        button.setBackgroundImage(#imageLiteral(resourceName: "favouritesList"), for: .normal)
+        button.setBackgroundImage(#imageLiteral(resourceName: "favouriteSelected"), for: .highlighted)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
@@ -45,27 +46,25 @@ class NewsViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        self.contentView.addSubview(newsImageView)
+        self.contentView.addSubview(newsTitleLabel)
+        self.contentView.addSubview(favouritesButton)
+        
+        newsImageView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor).isActive = true
+        newsImageView.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        newsImageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        
+        newsTitleLabel.leftAnchor.constraint(equalTo: newsImageView.rightAnchor, constant: 8).isActive = true
+        newsTitleLabel.rightAnchor.constraint(equalTo: favouritesButton.leftAnchor, constant: -8).isActive = true
+        newsTitleLabel.centerYAnchor.constraint(equalTo: newsImageView.centerYAnchor).isActive = true
+        
+        favouritesButton.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -8).isActive = true
+        favouritesButton.centerYAnchor.constraint(equalTo: newsImageView.centerYAnchor).isActive = true
+        favouritesButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        favouritesButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    //MARK: layout postavke
-    override func layoutSubviews() {
-        self.contentView.addSubview(newsImage)
-        newsImage.leftAnchor.constraint(equalTo: self.contentView.leftAnchor).isActive = true
-        newsImage.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        newsImage.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        
-        self.contentView.addSubview(newsTitle)
-        newsTitle.leftAnchor.constraint(equalTo: newsImage.rightAnchor, constant: 8).isActive = true
-        newsTitle.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: 8).isActive = true
-        newsTitle.centerYAnchor.constraint(equalTo: newsImage.centerYAnchor, constant: -8).isActive = true
-        
-        self.contentView.addSubview(newsDescription)
-        newsDescription.leftAnchor.constraint(equalTo: newsImage.rightAnchor, constant: 8).isActive = true
-        newsDescription.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 8).isActive = true
-        newsDescription.centerYAnchor.constraint(equalTo: newsImage.centerYAnchor, constant: 8).isActive = true
     }
 }
