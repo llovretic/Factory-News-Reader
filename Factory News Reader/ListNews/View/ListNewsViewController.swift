@@ -17,6 +17,7 @@ class ListNewsViewController: UITableViewController {
     let cellIdentifier = "CellID"
     let loadingIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
     var listNewsViewModel: ListNewsViewModel!
+//    weak var newsViewCellDelegate: NewsViewCellDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,9 +55,11 @@ class ListNewsViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? NewsViewCell else {
             return UITableViewCell()
         }
+        cell.newsViewCellDelegate = self
+        
         let dataForDisplay = listNewsViewModel.newsData[indexPath.row]
         cell.newsTitleLabel.text = dataForDisplay.title
-        if let imageURL = URL(string: dataForDisplay.urlToImage) {
+        if let imageURL = URL(string: dataForDisplay.urlToImage!) {
             DispatchQueue.global().async {
                 let data = try? Data(contentsOf: imageURL)
                 if let data = data {
@@ -134,7 +137,7 @@ class ListNewsViewController: UITableViewController {
     @objc func refreshAction(){
         listNewsViewModel.downloadTrigger.onNext(true)
     }
-
+    
     func initializeRefreshControl() {
         refresher = UIRefreshControl()
         tableView.addSubview(refresher)
@@ -143,3 +146,10 @@ class ListNewsViewController: UITableViewController {
     }
 }
 
+extension ListNewsViewController: NewsViewCellDelegate{
+    func favouriteButtonTapped(sender: NewsViewCell) {
+        guard let buttonTappedAtIndexPath = tableView.indexPath(for: sender) else { return }
+        
+        print("Button tapped", buttonTappedAtIndexPath.row)
+    }
+}

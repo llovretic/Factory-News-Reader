@@ -59,7 +59,7 @@ class SingleNewsViewController: UIViewController {
     //MARK: layout postavke
     func addSubViews() {
         view.addSubview(newsImage)
-        if let imageURL = URL(string: singlelNewsViewModel.newsDetailData.urlToImage) {
+        if let imageURL = URL(string: singlelNewsViewModel.newsDetailData.urlToImage!) {
             DispatchQueue.global().async {
                 let data = try? Data(contentsOf: imageURL)
                 if let data = data {
@@ -84,7 +84,7 @@ class SingleNewsViewController: UIViewController {
         
         
         view.addSubview(newsDescription)
-        newsDescription.text = singlelNewsViewModel.newsDetailData.description
+        newsDescription.text = singlelNewsViewModel.newsDetailData.descriptionNews
         newsDescription.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 8).isActive = true
         newsDescription.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -8).isActive = true
         newsDescription.topAnchor.constraint(equalTo: newsTitle.bottomAnchor, constant: 8).isActive = true

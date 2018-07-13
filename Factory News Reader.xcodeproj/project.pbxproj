@@ -22,6 +22,8 @@
 		474976C620F6AC6E009309F0 /* FavouriteNewsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474976C520F6AC6E009309F0 /* FavouriteNewsCoordinator.swift */; };
 		474976C820F6AC86009309F0 /* FavouriteNewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474976C720F6AC86009309F0 /* FavouriteNewsViewController.swift */; };
 		474976CA20F6ADA4009309F0 /* FavouriteNewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474976C920F6ADA4009309F0 /* FavouriteNewsViewModel.swift */; };
+		475C289120F8B5CF008595DD /* NewsViewCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475C289020F8B5CF008595DD /* NewsViewCellDelegate.swift */; };
+		475C289320F8D5A1008595DD /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475C289220F8D5A1008595DD /* RealmService.swift */; };
 		475F883420CA67F000A48C8C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475F883320CA67F000A48C8C /* AppDelegate.swift */; };
 		475F883620CA67F000A48C8C /* ListNewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475F883520CA67F000A48C8C /* ListNewsViewController.swift */; };
 		475F883920CA67F000A48C8C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 475F883720CA67F000A48C8C /* Main.storyboard */; };
@@ -54,6 +56,8 @@
 		474976C520F6AC6E009309F0 /* FavouriteNewsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteNewsCoordinator.swift; sourceTree = "<group>"; };
 		474976C720F6AC86009309F0 /* FavouriteNewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteNewsViewController.swift; sourceTree = "<group>"; };
 		474976C920F6ADA4009309F0 /* FavouriteNewsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteNewsViewModel.swift; sourceTree = "<group>"; };
+		475C289020F8B5CF008595DD /* NewsViewCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewCellDelegate.swift; sourceTree = "<group>"; };
+		475C289220F8D5A1008595DD /* RealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
 		475F883020CA67F000A48C8C /* Factory News Reader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Factory News Reader.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		475F883320CA67F000A48C8C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		475F883520CA67F000A48C8C /* ListNewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListNewsViewController.swift; sourceTree = "<group>"; };
@@ -184,6 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				475F884520CA7C4300A48C8C /* NewsViewCell.swift */,
+				475C289020F8B5CF008595DD /* NewsViewCellDelegate.swift */,
 			);
 			path = NewsCell;
 			sourceTree = "<group>";
@@ -293,6 +298,7 @@
 				47C18E6020CACFAB004327AD /* JSONModel.swift */,
 				87FAF60820EF6A0000D06B4D /* DataAndErrorWrapper.swift */,
 				47393A7C20EE514F00E4C75D /* NewsModel.swift */,
+				475C289220F8D5A1008595DD /* RealmService.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -468,9 +474,11 @@
 				473D6BC920F3373C00C44B60 /* Coordinator.swift in Sources */,
 				474976C420F650C9009309F0 /* BaseViewController.swift in Sources */,
 				473D6BCF20F36F4600C44B60 /* CoordinatorDelegate.swift in Sources */,
+				475C289320F8D5A1008595DD /* RealmService.swift in Sources */,
 				47BCA68920D91C7A00619C09 /* APIRepository.swift in Sources */,
 				473D6BCD20F33A2D00C44B60 /* SingleNewsCoordinator.swift in Sources */,
 				47C909E420E59C9300D45D51 /* SingleNewsViewModel.swift in Sources */,
+				475C289120F8B5CF008595DD /* NewsViewCellDelegate.swift in Sources */,
 				476AD2DC20CC281E0023FA6B /* SingleNewsViewController.swift in Sources */,
 				474976C820F6AC86009309F0 /* FavouriteNewsViewController.swift in Sources */,
 				87FAF60920EF6A0000D06B4D /* DataAndErrorWrapper.swift in Sources */,

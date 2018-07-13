@@ -35,7 +35,7 @@ class ListNewsViewModel {
             .observeOn(MainScheduler.instance)
             .map({ (articles)  -> DataAndErrorWrapper in
                 let data =  articles.map { (news) -> NewsData in
-                    return NewsData(title: news.title, description: news.description, urlToImage: news.urlToImage)
+                    return NewsData(value: ["title": news.title , "descriptionNews": news.description , "urlToImage": news.urlToImage])
                 }
                 return DataAndErrorWrapper(data: data, error: nil)
                 
@@ -70,6 +70,18 @@ class ListNewsViewModel {
     }
     func newsIsSelected(selectedNews: Int){
         self.listNewsCoordinatorDelegate?.openSingleNews(selectedNews: newsData[selectedNews])
+    }
+    
+    func favouriteButtonPressed(selectedNews: Int){
+        let savedNews = newsData[selectedNews]
+        
+        if savedNews.isNewsFavourite {
+            
+            savedNews.isNewsFavourite = false
+        } else {
+            
+            savedNews.isNewsFavourite = true
+        }
     }
 }
 

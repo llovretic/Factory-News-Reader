@@ -7,9 +7,12 @@
 //
 
 import Foundation
+import Realm
+import RealmSwift
 
-struct NewsData{
-    let title: String
-    let description: String
-    let urlToImage: String
+class NewsData: Object {
+    @objc dynamic var title: String? = nil
+    @objc dynamic var descriptionNews: String? = nil
+    @objc dynamic var urlToImage: String? = nil
+    @objc dynamic var isNewsFavourite: Bool = false
 }

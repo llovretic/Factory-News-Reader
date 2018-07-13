@@ -11,6 +11,7 @@ import UIKit
 
 class NewsViewCell: UITableViewCell {
     //MARK: varijable
+    weak var newsViewCellDelegate: NewsViewCellDelegate?
 //    var urlToImage: String
 //    var title: String
     
@@ -33,7 +34,8 @@ class NewsViewCell: UITableViewCell {
     var favouritesButton: UIButton = {
         let button = UIButton()
         button.setBackgroundImage(#imageLiteral(resourceName: "favouritesList"), for: .normal)
-        button.setBackgroundImage(#imageLiteral(resourceName: "favouriteSelected"), for: .highlighted)
+        button.setBackgroundImage(#imageLiteral(resourceName: "favouriteSelected"), for: .selected)
+//        button.addTarget(self, action: #selector(favouriteButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -62,9 +64,16 @@ class NewsViewCell: UITableViewCell {
         favouritesButton.centerYAnchor.constraint(equalTo: newsImageView.centerYAnchor).isActive = true
         favouritesButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
         favouritesButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        favouritesButton.addTarget(self, action: #selector(favouriteButtonTapped(sender:)), for: .touchUpInside)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    @objc func favouriteButtonTapped(sender: UIButton){
+        newsViewCellDelegate?.favouriteButtonTapped(sender: self)
+    }
 }
+
