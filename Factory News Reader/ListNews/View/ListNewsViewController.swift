@@ -55,10 +55,13 @@ class ListNewsViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? NewsViewCell else {
             return UITableViewCell()
         }
+        
         cell.newsViewCellDelegate = self
         
         let dataForDisplay = listNewsViewModel.newsData[indexPath.row]
+        
         cell.newsTitleLabel.text = dataForDisplay.title
+        
         if let imageURL = URL(string: dataForDisplay.urlToImage!) {
             DispatchQueue.global().async {
                 let data = try? Data(contentsOf: imageURL)
@@ -70,6 +73,7 @@ class ListNewsViewController: UITableViewController {
                 }
             }
         }
+        
         if dataForDisplay.isNewsFavourite {
             cell.favouritesButton.isSelected = true
         }

@@ -11,7 +11,6 @@ import RealmSwift
 import RxSwift
 
 class RealmSerivce {
-    let newsIsFavourited = PublishSubject<Bool>()
     
     var realm = try! Realm()
     
@@ -19,8 +18,8 @@ class RealmSerivce {
         do {
             try realm.write {
                 realm.add(object)
-                self.newsIsFavourited.onNext(true)
             }
+            
         } catch let error{
                 print(error.localizedDescription)
         }
@@ -30,7 +29,6 @@ class RealmSerivce {
         do{
             try realm.write {
                 realm.delete(object)
-                self.newsIsFavourited.onNext(false)
             }
         }catch let error {
             print(error.localizedDescription)

@@ -22,7 +22,7 @@ class ListNewsViewModel {
     var successDownloadTime: Date?
     var listNewsCoordinatorDelegate: ListNewsCoordinatorDelegate?
     var realmService: RealmSerivce!
-    var results: Results<Object>!
+    var results: Results<NewsData>!
     var favouritesNewsData: [NewsData]! = []
     let disposeBag = DisposeBag()
     
@@ -98,11 +98,11 @@ class ListNewsViewModel {
     //MARK: Usporedba podataka s APIa i Realma
     func compareRealmDataWithAPIData(){
         self.realmService = RealmSerivce()
-        self.results = self.realmService.realm.objects(Object.self)
-        let favoriteNews = self.realmService.realm.objects(Object.self)
+        self.results = self.realmService.realm.objects(NewsData.self)
+        let favoriteNews = self.realmService.realm.objects(NewsData.self)
         if favoriteNews.count != 0 {
             for element in favoriteNews {
-                favouritesNewsData.append(element as! NewsData)
+                favouritesNewsData.append(element)
             }
         } else {
         }
@@ -111,9 +111,6 @@ class ListNewsViewModel {
             for(apiData) in newsData {
                 if localData.title == apiData.title {
                     apiData.isNewsFavourite = true
-                }
-                else {
-                    apiData.isNewsFavourite = false
                 }
             }
         }
