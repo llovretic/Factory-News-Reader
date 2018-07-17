@@ -12,8 +12,7 @@ import UIKit
 class NewsViewCell: UITableViewCell {
     //MARK: varijable
     weak var newsViewCellDelegate: NewsViewCellDelegate?
-//    var urlToImage: String
-//    var title: String
+
     
     var newsImageView: UIImageView = {
         let imageView = UIImageView()
@@ -35,7 +34,6 @@ class NewsViewCell: UITableViewCell {
         let button = UIButton()
         button.setBackgroundImage(#imageLiteral(resourceName: "favouritesList"), for: .normal)
         button.setBackgroundImage(#imageLiteral(resourceName: "favouriteSelected"), for: .selected)
-//        button.addTarget(self, action: #selector(favouriteButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

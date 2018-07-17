@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import RxSwift
+import RealmSwift
 
 class ListNewsViewModel {
     
@@ -20,11 +21,16 @@ class ListNewsViewModel {
     var newsData: [NewsData] = []
     var successDownloadTime: Date?
     var listNewsCoordinatorDelegate: ListNewsCoordinatorDelegate?
-
+    var realmService: RealmSerivce!
+    var results: Results<Object>!
+    var favouritesNewsData: [NewsData]! = []
+    let disposeBag = DisposeBag()
+    
     init(newsService: APIRepository){
         self.newsService = newsService
     }
     
+    //MARK: funkcija koja prati podatke i obrađuje ih za viewč
     func initializeObservableDataAPI() -> Disposable{
         let downloadObserver = downloadTrigger.flatMap { [unowned self] (_) -> Observable<[Article]> in
             self.loaderControll.onNext(true)
@@ -54,7 +60,7 @@ class ListNewsViewModel {
                 }
             })
     }
-    
+    //MARK: Funkcija koja provjerava koliko su podaci stari, te jel potrebno triggerat novi download
     func checkingHowOldIsData() {
         let currentTime = Date()
         if (successDownloadTime == nil) {
@@ -68,20 +74,51 @@ class ListNewsViewModel {
             self.downloadTrigger.onNext(true)
         }
     }
+    
     func newsIsSelected(selectedNews: Int){
         self.listNewsCoordinatorDelegate?.openSingleNews(selectedNews: newsData[selectedNews])
     }
-    
+    //MARK: Funkcija koja govori što se radi na favourite Button akciju
     func favouriteButtonPressed(selectedNews: Int){
         let savedNews = newsData[selectedNews]
-        
+        self.realmService = RealmSerivce()
         if savedNews.isNewsFavourite {
+            print("Birsem iz baze")
+//            savedNews.isNewsFavourite = false
+            self.realmService.delete(object: savedNews)
             
-            savedNews.isNewsFavourite = false
         } else {
-            
+            print("Spremam u bazu")
             savedNews.isNewsFavourite = true
+            self.realmService.create(object: savedNews)
+            
         }
     }
+    
+    //MARK: Usporedba podataka s APIa i Realma
+    func compareRealmDataWithAPIData(){
+        self.realmService = RealmSerivce()
+        self.results = self.realmService.realm.objects(Object.self)
+        let favoriteNews = self.realmService.realm.objects(Object.self)
+        if favoriteNews.count != 0 {
+            for element in favoriteNews {
+                favouritesNewsData.append(element as! NewsData)
+            }
+        } else {
+        }
+
+        for (localData) in favouritesNewsData{
+            for(apiData) in newsData {
+                if localData.title == apiData.title {
+                    apiData.isNewsFavourite = true
+                }
+                else {
+                    apiData.isNewsFavourite = false
+                }
+            }
+        }
+    }
+    
+    
 }
 

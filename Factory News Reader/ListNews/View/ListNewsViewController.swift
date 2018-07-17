@@ -17,7 +17,7 @@ class ListNewsViewController: UITableViewController {
     let cellIdentifier = "CellID"
     let loadingIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
     var listNewsViewModel: ListNewsViewModel!
-//    weak var newsViewCellDelegate: NewsViewCellDelegate?
+    weak var newsViewCellDelegate: NewsViewCellDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +70,9 @@ class ListNewsViewController: UITableViewController {
                 }
             }
         }
+        if dataForDisplay.isNewsFavourite {
+            cell.favouritesButton.isSelected = true
+        }
         return cell
     }
     
@@ -96,13 +99,14 @@ class ListNewsViewController: UITableViewController {
                     self.loadingIndicator.startAnimating()
                 }
                 else {
+                    //self.listNewsViewModel.compareRealmDataWithAPIData()
                     self.loadingIndicator.stopAnimating()
                     self.loadingIndicator.removeFromSuperview()
                 }
             })
             .disposed(by: disposeBag)
     }
-    
+    //MARK: funkcija koja prati podatke te ukoliko su spremni refresha tablicu
     func initializeDataObservable(){
         let dataObserver = listNewsViewModel.dataIsReady
         dataObserver
@@ -116,7 +120,7 @@ class ListNewsViewController: UITableViewController {
             })
             .disposed(by: disposeBag)
     }
-    
+    //MARK: funkcija koja kontrolira error alert
     func initializeErrorObservable() {
         let errorObserver = listNewsViewModel.errorOccured
             errorObserver
@@ -133,23 +137,28 @@ class ListNewsViewController: UITableViewController {
             })
         .disposed(by: disposeBag)
     }
-    
+    //MARK: funkcija za pokretanje downloada u pull to refresh
     @objc func refreshAction(){
         listNewsViewModel.downloadTrigger.onNext(true)
     }
-    
+    //MARK: incijalizacija za pull to refresh
     func initializeRefreshControl() {
         refresher = UIRefreshControl()
         tableView.addSubview(refresher)
         refresher.tintColor = UIColor.red
         refresher.addTarget(self, action: #selector(refreshAction), for: .valueChanged)
     }
+    
+    //MARK: funkcija koja govori koji je favourite button kliknut
+    func pressedFavouriteButton(sender: NewsViewCell){
+       newsViewCellDelegate?.favouriteButtonTapped(sender: sender)
+    }
+    
 }
 
 extension ListNewsViewController: NewsViewCellDelegate{
     func favouriteButtonTapped(sender: NewsViewCell) {
         guard let buttonTappedAtIndexPath = tableView.indexPath(for: sender) else { return }
-        
-        print("Button tapped", buttonTappedAtIndexPath.row)
+        listNewsViewModel.favouriteButtonPressed(selectedNews: buttonTappedAtIndexPath.row)
     }
 }

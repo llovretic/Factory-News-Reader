@@ -39,7 +39,6 @@ extension ListNewsCoordinator: ListNewsCoordinatorDelegate{
         coordinator.parentCoordinatorDelegate = self
         coordinator.start()
         self.addChildCoordinator(childCoordinator: coordinator)
-        print(self.childCoordinators)
         
     }
     

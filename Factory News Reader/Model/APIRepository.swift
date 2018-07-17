@@ -18,7 +18,6 @@ class APIRepository {
     //MARK: Funkcija za skidanje podataka
     func observableFetchData() -> Observable<[Article]> {
         return Observable<[Article]>.create { observer in
-            print("Pokrenuto skidanje")
             let request = Alamofire.request(self.url)
             request.validate()
                 .responseJSON { response in

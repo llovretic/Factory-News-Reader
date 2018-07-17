@@ -11,4 +11,3 @@ import Foundation
 protocol ListNewsCoordinatorDelegate: CoordinatorDelegate {
     func openSingleNews(selectedNews: NewsData)
 }
-

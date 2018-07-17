@@ -10,15 +10,9 @@ import UIKit
 import RxSwift
 
 class BaseViewController: UITabBarController {
-    
-    var baseViewModel: BaseViewModel!
-    
-    var listNewsController: ListNewsViewController!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-//        tabBar.barTintColor = UIColor.blue
         navigationItem.title = "Factory"
-        
     }
 }

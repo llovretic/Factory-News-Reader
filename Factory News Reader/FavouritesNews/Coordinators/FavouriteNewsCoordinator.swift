@@ -17,8 +17,8 @@ class FavouriteNewsCoordinator: Coordinator {
     init(presenter: UINavigationController){
         self.presenter = presenter
         let favouriteNewsController = FavouriteNewsViewController()
-//        let listNewsviewModel = ListNewsViewModel(newsService: APIRepository())
-//        listNewsController.listNewsViewModel = listNewsviewModel
+        let favouriteNewsViewModel = FavouriteNewsViewModel()
+        favouriteNewsController.favouriteNewsViewModel = favouriteNewsViewModel
         self.controller = favouriteNewsController
     }
     
