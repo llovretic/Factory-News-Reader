@@ -48,7 +48,7 @@ class ListNewsViewController: UITableViewController {
     
     //MARK: Funkcije za posatavljanje tableViewa
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return listNewsViewModel.newsData.count
+        return listNewsViewModel.listNewsData.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -58,7 +58,7 @@ class ListNewsViewController: UITableViewController {
         
         cell.newsViewCellDelegate = self
         
-        let dataForDisplay = listNewsViewModel.newsData[indexPath.row]
+        let dataForDisplay = listNewsViewModel.listNewsData[indexPath.row]
         
         cell.newsTitleLabel.text = dataForDisplay.title
         
@@ -74,9 +74,8 @@ class ListNewsViewController: UITableViewController {
             }
         }
         
-        if dataForDisplay.isNewsFavourite {
-            cell.favouritesButton.isSelected = true
-        }
+        cell.favouritesButton.isSelected = dataForDisplay.isNewsFavourite
+        
         return cell
     }
     
@@ -103,7 +102,6 @@ class ListNewsViewController: UITableViewController {
                     self.loadingIndicator.startAnimating()
                 }
                 else {
-                    //self.listNewsViewModel.compareRealmDataWithAPIData()
                     self.loadingIndicator.stopAnimating()
                     self.loadingIndicator.removeFromSuperview()
                 }
@@ -164,5 +162,7 @@ extension ListNewsViewController: NewsViewCellDelegate{
     func favouriteButtonTapped(sender: NewsViewCell) {
         guard let buttonTappedAtIndexPath = tableView.indexPath(for: sender) else { return }
         listNewsViewModel.favouriteButtonPressed(selectedNews: buttonTappedAtIndexPath.row)
+        tableView.reloadRows(at: [buttonTappedAtIndexPath], with: .none)
+//        tableView.reloadData()
     }
 }

@@ -651,7 +651,7 @@
 				475F884120CA67F000A48C8C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		475F884220CA67F000A48C8C /* Build configuration list for PBXNativeTarget "Factory News Reader" */ = {
 			isa = XCConfigurationList;
@@ -660,7 +660,7 @@
 				475F884420CA67F000A48C8C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

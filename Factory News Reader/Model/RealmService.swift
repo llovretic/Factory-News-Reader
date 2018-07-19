@@ -13,6 +13,7 @@ import RxSwift
 class RealmSerivce {
     
     var realm = try! Realm()
+    var favouriteNews: [NewsData] = []
     
     func create<T: NewsData>(object: T) {
         do {
@@ -33,5 +34,13 @@ class RealmSerivce {
         }catch let error {
             print(error.localizedDescription)
         }
+    }
+    
+    func favouriteNewsDataObservable() -> Observable<[NewsData]> {
+        let favouriteNewsData = self.realm.objects(NewsData.self)
+        for item in favouriteNewsData{
+            favouriteNews += [item]
+        }
+        return Observable.just(favouriteNews)
     }
 }

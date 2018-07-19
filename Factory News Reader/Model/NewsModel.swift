@@ -9,10 +9,15 @@
 import Foundation
 import Realm
 import RealmSwift
+import Realm
 
 class NewsData: Object {
     @objc dynamic var title: String? = nil
     @objc dynamic var descriptionNews: String? = nil
     @objc dynamic var urlToImage: String? = nil
     @objc dynamic var isNewsFavourite: Bool = false
+    
+    override static func primaryKey() -> String? {
+        return "title"
+    }
 }
