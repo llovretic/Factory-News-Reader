@@ -20,6 +20,7 @@ class FavouriteNewsCoordinator: Coordinator {
         let favouriteNewsViewModel = FavouriteNewsViewModel()
         favouriteNewsController.favouriteNewsViewModel = favouriteNewsViewModel
         self.controller = favouriteNewsController
+        controller.favouriteNewsViewModel.favouriteNewsCoordinatorDelegate = self
     }
     
     deinit {
@@ -29,5 +30,22 @@ class FavouriteNewsCoordinator: Coordinator {
     func start() {
         presenter.pushViewController(controller, animated: true)
     }
+    
+}
+
+extension FavouriteNewsCoordinator: ListNewsCoordinatorDelegate{
+    func openSingleNews(selectedNews: NewsData) {
+        print("openSingleNewsInitiated")
+        let newsDetailCoordinator = SingleNewsCoordinator(presenter: self.presenter, news: selectedNews)
+        print(newsDetailCoordinator)
+        newsDetailCoordinator.start()
+        self.addChildCoordinator(childCoordinator: newsDetailCoordinator)
+    }
+    
+    func viewControllerHasFinished() {
+        self.childCoordinators.removeAll()
+        parentCoordinatorDelegate?.childHasFinished(coordinator: self)
+    }
+    
     
 }

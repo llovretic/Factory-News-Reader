@@ -12,7 +12,6 @@ class BaseCoordinator: Coordinator  {
     var presenter: UINavigationController
     var childCoordinators: [Coordinator] = []
     let controller: BaseViewController
-    weak var baseCoordinatorDelegate: BaseCoordinatorDelegate!
     
     init(presenter: UINavigationController){
         self.presenter = presenter

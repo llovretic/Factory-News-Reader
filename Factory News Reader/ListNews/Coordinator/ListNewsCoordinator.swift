@@ -23,7 +23,6 @@ class ListNewsCoordinator: Coordinator {
     }
     
     deinit {
-        print("deinit list coordinator")
     }
     
     func start() {

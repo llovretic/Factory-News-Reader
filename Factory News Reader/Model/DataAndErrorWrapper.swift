@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct DataAndErrorWrapper {
-    var data: [NewsData]
+struct DataAndErrorWrapper<T> {
+    var data: [T]
     var error: String?
 }

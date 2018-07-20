@@ -13,34 +13,34 @@ import RxSwift
 class RealmSerivce {
     
     var realm = try! Realm()
-    var favouriteNews: [NewsData] = []
     
     func create<T: NewsData>(object: T) {
         do {
             try realm.write {
                 realm.add(object)
             }
-            
+
         } catch let error{
-                print(error.localizedDescription)
+                 Observable.just(DataAndErrorWrapper(data: [], error: error.localizedDescription))
         }
     }
     
     func delete<T: NewsData>(object: T){
         do{
             try realm.write {
-                realm.delete(object)
+                realm.delete(realm.objects(NewsData.self).filter("title=%@", object.title!))
             }
         }catch let error {
-            print(error.localizedDescription)
+             Observable.just(DataAndErrorWrapper(data: [], error: error.localizedDescription))
         }
     }
     
-    func favouriteNewsDataObservable() -> Observable<[NewsData]> {
-        let favouriteNewsData = self.realm.objects(NewsData.self)
+    func favouriteNewsDataObservable() ->(Observable<DataAndErrorWrapper<NewsData>>) {
+        var favouriteNews: [NewsData] = []
+         let favouriteNewsData = self.realm.objects(NewsData.self)
         for item in favouriteNewsData{
             favouriteNews += [item]
         }
-        return Observable.just(favouriteNews)
+        return Observable.just(DataAndErrorWrapper(data: favouriteNews, error: nil))
     }
 }

@@ -20,10 +20,7 @@ class AppCoordinator: Coordinator{
     func start(){
         let tabBarCoordinator = BaseCoordinator(presenter: presenter)
         tabBarCoordinator.start()
-        
-//        let coordinator = ListNewsCoordinator(presenter: presenter)
-//        coordinator.start()
-//        self.addChildCoordinator(childCoordinator: coordinator)
+        self.addChildCoordinator(childCoordinator: tabBarCoordinator)
     }
 }
 

@@ -23,7 +23,6 @@ class ListNewsViewModel {
     var listNewsCoordinatorDelegate: ListNewsCoordinatorDelegate?
     var realmService = RealmSerivce()
     var results: Results<NewsData>!
-    var favouritesNewsData: [NewsData] = []
     
     init(newsService: APIRepository){
         self.newsService = newsService
@@ -31,38 +30,41 @@ class ListNewsViewModel {
     
     //MARK: funkcija koja prati podatke i obrađuje ih za view
     func initializeObservableDataAPI() -> Disposable{
-        
-        let combineObserver = downloadTrigger.flatMap { [unowned self] (_) -> Observable<([Article], [NewsData])> in
+     
+        let combineObserver = downloadTrigger.flatMap { [unowned self] (_) -> Observable<(DataAndErrorWrapper<NewsData>, DataAndErrorWrapper<NewsData>)> in
             self.loaderControll.onNext(true)
-             let downloadObserver = self.newsService.observableFetchData()
-             let databaseObserver = self.realmService.favouriteNewsDataObservable()
-           
-           
+            let downloadObserver = self.newsService.observableFetchData()
+            let databaseObserver = self.realmService.favouriteNewsDataObservable()
             
-            return Observable.combineLatest(downloadObserver,databaseObserver)
+            let unwrappedDownloadObserver = downloadObserver.map({ (wrapperArticleData) -> DataAndErrorWrapper<NewsData> in
+                let data = wrapperArticleData.map({ (article) -> NewsData in
+                    return NewsData(value: ["title": article.title, "descriptionNews": article.description, "urlToImage": article.urlToImage])
+                })
+                return DataAndErrorWrapper(data: data, error: nil)
+            })
+            return Observable.combineLatest(unwrappedDownloadObserver,databaseObserver)
         }
-            return combineObserver
-        .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-        .observeOn(MainScheduler.instance)
-            .map{ (wrapper, favourite) -> ([NewsData],[NewsData]) in
-                let data = wrapper.map { (news) -> NewsData in
-                    return NewsData(value: ["title": news.title , "descriptionNews": news.description , "urlToImage": news.urlToImage])
-                }
-                return (data, favourite)
-            }
-            .subscribe(onNext: { [unowned self] (newsData, favouritesData) in
-                for (localData) in favouritesData{
-                    for(apiData) in newsData {
-                        if localData.title == apiData.title {
+        return combineObserver
+            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            .observeOn(MainScheduler.instance)
+            .map({ (newsData, favouriteData) -> (DataAndErrorWrapper<NewsData>, DataAndErrorWrapper<NewsData>) in
+                for localData in favouriteData.data{
+                    for apiData in newsData.data{
+                        if localData.title == apiData.title{
                             apiData.isNewsFavourite = true
                         }
                     }
                 }
-                self.listNewsData = newsData
-                self.favouritesNewsData = favouritesData
+                return (newsData, favouriteData)
+            })
+            
+            
+            .subscribe(onNext: { [unowned self] (newsData, favouritesData) in
+                self.listNewsData = newsData.data
                 self.dataIsReady.onNext(true)
                 self.loaderControll.onNext(false)
                 self.successDownloadTime = Date()
+
             })
         
     }
@@ -88,15 +90,30 @@ class ListNewsViewModel {
     
     //MARK: Funkcija koja govori što se radi na favourite Button akciju
     func favouriteButtonPressed(selectedNews: Int){
-        let savedNews = listNewsData[selectedNews]
+        let savedNews = NewsData(value: listNewsData[selectedNews])
         if savedNews.isNewsFavourite{
-            let newsToDelete = realmService.realm.object(ofType: NewsData.self, forPrimaryKey: savedNews.title)
-            self.realmService.delete(object: newsToDelete!)
-            savedNews.isNewsFavourite = false
+            self.realmService.delete(object: savedNews)
+            listNewsData[selectedNews].isNewsFavourite = false
         }
         else {
+            listNewsData[selectedNews].isNewsFavourite = true
             savedNews.isNewsFavourite = true
             self.realmService.create(object: savedNews)
+        }
+    }
+    
+    func compareAPIWithRealm() {
+        for apiData in listNewsData {
+            apiData.isNewsFavourite = false
+        }
+        
+        let favoriteNewsData = self.realmService.realm.objects(NewsData.self)
+        for data in favoriteNewsData{
+            for(apiData) in listNewsData {
+                if data.title == apiData.title {
+                    apiData.isNewsFavourite = true
+                }
+            }
         }
     }
 }

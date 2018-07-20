@@ -10,6 +10,7 @@ import UIKit
 
 class SingleNewsViewController: UIViewController {
     //MARK: varijable
+    weak var newsViewCellDelegate: NewsViewCellDelegate?
     var singlelNewsViewModel: SingleNewsViewModel!
     
     var newsImage: UIImageView = {
@@ -33,6 +34,13 @@ class SingleNewsViewController: UIViewController {
         textView.isScrollEnabled = true
         textView.font = .italicSystemFont(ofSize: 18)
         return textView
+    }()
+    
+    var favouriteButton: UIButton = {
+        let barButton = UIButton()
+        barButton.setBackgroundImage(#imageLiteral(resourceName: "favouriteUnselected"), for: .normal)
+        barButton.setBackgroundImage(#imageLiteral(resourceName: "favouriteSelected"), for: .selected)
+        return barButton
     }()
     
     override func viewDidLoad() {
@@ -89,7 +97,15 @@ class SingleNewsViewController: UIViewController {
         newsDescription.topAnchor.constraint(equalTo: newsTitle.bottomAnchor, constant: 8).isActive = true
         newsDescription.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: favouriteButton)
+        favouriteButton.addTarget(self, action: #selector(favouriteButtonTapped), for: .touchUpInside)
+        favouriteButton.isSelected = singlelNewsViewModel.newsDetailData.isNewsFavourite
+        
         navigationItem.title = singlelNewsViewModel.newsDetailData.title
+    }
+    
+    @objc func favouriteButtonTapped() {
+        favouriteButton.isSelected = singlelNewsViewModel.goThroughFavouriteNewsLogic()
     }
     
 }
