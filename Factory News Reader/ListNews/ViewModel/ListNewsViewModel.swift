@@ -57,16 +57,18 @@ class ListNewsViewModel {
                 }
                 return (newsData, favouriteData)
             })
-            
-            
             .subscribe(onNext: { [unowned self] (newsData, favouritesData) in
+                if newsData.error == nil{
                 self.listNewsData = newsData.data
                 self.dataIsReady.onNext(true)
                 self.loaderControll.onNext(false)
                 self.successDownloadTime = Date()
+                }
+                else {
+                    self.errorOccured.onNext(true)
+                }
 
             })
-        
     }
     
     //MARK: Funkcija koja provjerava koliko su podaci stari, te jel potrebno triggerat novi download
@@ -78,6 +80,7 @@ class ListNewsViewModel {
         }
         let compareTime = successDownloadTime?.addingTimeInterval((5*60))
         if compareTime! > currentTime  {
+            compareAPIWithRealm()
             return
         } else {
             self.downloadTrigger.onNext(true)
@@ -89,7 +92,7 @@ class ListNewsViewModel {
     }
     
     //MARK: Funkcija koja govori što se radi na favourite Button akciju
-    func favouriteButtonPressed(selectedNews: Int){
+    func addOrRemoveDataFromFavourites(selectedNews: Int){
         let savedNews = NewsData(value: listNewsData[selectedNews])
         if savedNews.isNewsFavourite{
             self.realmService.delete(object: savedNews)
@@ -100,6 +103,7 @@ class ListNewsViewModel {
             savedNews.isNewsFavourite = true
             self.realmService.create(object: savedNews)
         }
+        self.dataIsReady.onNext(true)
     }
     
     func compareAPIWithRealm() {
@@ -115,6 +119,7 @@ class ListNewsViewModel {
                 }
             }
         }
+          self.dataIsReady.onNext(true)
     }
 }
 

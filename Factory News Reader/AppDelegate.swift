@@ -30,9 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationApperance.tintColor = UIColor.white
         navigationApperance.barTintColor = UIColor.blue
         navigationApperance.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
-       
-        //UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
-        
+               
         // Override point for customization after application launch.
         return true
     }

@@ -43,9 +43,7 @@ extension ListNewsCoordinator: ListNewsCoordinatorDelegate{
     
     func viewControllerHasFinished() {
         childCoordinators.removeAll()
-        print("childCoordinators remove")
         parentCoordinatorDelegate?.childHasFinished(coordinator: self)
-        print("child has finished")
     }
 }
 

@@ -14,7 +14,7 @@ class SingleNewsViewModel {
     var newsDetailData: NewsData!
     let realmService = RealmSerivce()
 
-    func goThroughFavouriteNewsLogic() -> Bool{
+    func addOrRemoveFavouritesData() -> Bool{
         let savedNews = NewsData(value: newsDetailData)
         
         if (savedNews.isNewsFavourite == true) {

@@ -24,6 +24,8 @@ class SingleNewsViewController: UIViewController {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 2
         return label
     }()
     
@@ -31,7 +33,7 @@ class SingleNewsViewController: UIViewController {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isEditable = false
-        textView.isScrollEnabled = true
+        textView.isScrollEnabled = false
         textView.font = .italicSystemFont(ofSize: 18)
         return textView
     }()
@@ -41,6 +43,12 @@ class SingleNewsViewController: UIViewController {
         barButton.setBackgroundImage(#imageLiteral(resourceName: "favouriteUnselected"), for: .normal)
         barButton.setBackgroundImage(#imageLiteral(resourceName: "favouriteSelected"), for: .selected)
         return barButton
+    }()
+    
+    var scrollContentView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
     }()
     
     override func viewDidLoad() {
@@ -65,7 +73,13 @@ class SingleNewsViewController: UIViewController {
     
     //MARK: layout postavke
     func addSubViews() {
-        view.addSubview(newsImage)
+        view.addSubview(scrollContentView)
+        scrollContentView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        scrollContentView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        scrollContentView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        scrollContentView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        
+        scrollContentView.addSubview(newsImage)
         if let imageURL = URL(string: singlelNewsViewModel.newsDetailData.urlToImage!) {
             DispatchQueue.global().async {
                 let data = try? Data(contentsOf: imageURL)
@@ -77,25 +91,24 @@ class SingleNewsViewController: UIViewController {
                 }
             }
         }
-        newsImage.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        newsImage.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        newsImage.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        newsImage.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        newsImage.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor).isActive = true
+        newsImage.trailingAnchor.constraint(equalTo: scrollContentView.trailingAnchor).isActive = true
+        newsImage.topAnchor.constraint(equalTo: scrollContentView.topAnchor).isActive = true
+        newsImage.centerXAnchor.constraint(equalTo: scrollContentView.centerXAnchor).isActive = true
+        newsImage.heightAnchor.constraint(equalToConstant: 200).isActive = true
         
-        view.addSubview(newsTitle)
+        scrollContentView.addSubview(newsTitle)
         newsTitle.text = singlelNewsViewModel.newsDetailData.title
-        newsTitle.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 8).isActive = true
-        newsTitle.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -8).isActive = true
-        newsTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 308).isActive = true
-        newsTitle.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 360) .isActive = true
+        newsTitle.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 8).isActive = true
+        newsTitle.trailingAnchor.constraint(equalTo: scrollContentView.trailingAnchor, constant: -8).isActive = true
+        newsTitle.topAnchor.constraint(equalTo: newsImage.bottomAnchor, constant: 8).isActive = true
         
-        
-        view.addSubview(newsDescription)
+        scrollContentView.addSubview(newsDescription)
         newsDescription.text = singlelNewsViewModel.newsDetailData.descriptionNews
-        newsDescription.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 8).isActive = true
-        newsDescription.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -8).isActive = true
+        newsDescription.leadingAnchor.constraint(equalTo: scrollContentView.leadingAnchor, constant: 8).isActive = true
+        newsDescription.trailingAnchor.constraint(equalTo: scrollContentView.trailingAnchor, constant: -8).isActive = true
         newsDescription.topAnchor.constraint(equalTo: newsTitle.bottomAnchor, constant: 8).isActive = true
-        newsDescription.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        newsDescription.bottomAnchor.constraint(equalTo: scrollContentView.bottomAnchor).isActive = true
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: favouriteButton)
         favouriteButton.addTarget(self, action: #selector(favouriteButtonTapped), for: .touchUpInside)
@@ -105,7 +118,7 @@ class SingleNewsViewController: UIViewController {
     }
     
     @objc func favouriteButtonTapped() {
-        favouriteButton.isSelected = singlelNewsViewModel.goThroughFavouriteNewsLogic()
+        favouriteButton.isSelected = singlelNewsViewModel.addOrRemoveFavouritesData()
     }
     
 }

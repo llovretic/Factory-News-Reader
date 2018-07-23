@@ -31,14 +31,12 @@ class ListNewsViewController: UITableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         listNewsViewModel.checkingHowOldIsData()
-        listNewsViewModel.compareAPIWithRealm()
-        tableView.reloadData()
+
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if self.isMovingFromParentViewController {
-            print("Moving Back to ParentViewController! list")
             listNewsViewModel.listNewsCoordinatorDelegate?.viewControllerHasFinished()
         }
     
@@ -164,8 +162,6 @@ class ListNewsViewController: UITableViewController {
 extension ListNewsViewController: NewsViewCellDelegate{
     func favouriteButtonTapped(sender: NewsViewCell) {
         guard let buttonTappedAtIndexPath = tableView.indexPath(for: sender) else { return }
-        listNewsViewModel.favouriteButtonPressed(selectedNews: buttonTappedAtIndexPath.row)
-//        tableView.reloadRows(at: [buttonTappedAtIndexPath], with: .none)
-        tableView.reloadData()
+        listNewsViewModel.addOrRemoveDataFromFavourites(selectedNews: buttonTappedAtIndexPath.row)
     }
 }
