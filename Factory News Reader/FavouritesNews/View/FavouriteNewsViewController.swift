@@ -20,6 +20,7 @@ class FavouriteNewsViewController: UITableViewController {
         tableView.register(NewsViewCell.self, forCellReuseIdentifier: cellIndetifier)
         favouriteNewsViewModel.getFavouriteNewsData().disposed(by: disposeBag)
         initializeDataObservable()
+        initializeErrorObservable()
         
     }
     
@@ -80,6 +81,19 @@ class FavouriteNewsViewController: UITableViewController {
     
     func triggerFavouritesData(){
         favouriteNewsViewModel.favouriteNewsTrigger.onNext(true)
+    }
+    
+    func initializeErrorObservable(){
+        let errorObserver = favouriteNewsViewModel.errorOccured
+            errorObserver
+            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { (event) in
+                if event {
+                    ErrorController.alert(viewToPresent: self, title: "Greška!", message: "Ups, došlo je do pogreške")
+                }
+            })
+            .disposed(by: disposeBag)
     }
 }
 

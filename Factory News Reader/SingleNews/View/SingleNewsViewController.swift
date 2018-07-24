@@ -7,16 +7,18 @@
 //
 
 import UIKit
+import RxSwift
 
 class SingleNewsViewController: UIViewController {
     //MARK: varijable
     weak var newsViewCellDelegate: NewsViewCellDelegate?
     var singlelNewsViewModel: SingleNewsViewModel!
+    let disposeBag = DisposeBag()
     
     var newsImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
+//        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
@@ -54,6 +56,7 @@ class SingleNewsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubViews()
+        initializeErrorObservable()
         view.backgroundColor = UIColor.white
     }
     
@@ -119,6 +122,19 @@ class SingleNewsViewController: UIViewController {
     
     @objc func favouriteButtonTapped() {
         favouriteButton.isSelected = singlelNewsViewModel.addOrRemoveFavouritesData()
+    }
+    
+    func initializeErrorObservable(){
+        let errorObserver = singlelNewsViewModel.errorOccured
+        errorObserver
+            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { (event) in
+                if event {
+                    ErrorController.alert(viewToPresent: self, title: "Greška!", message: "Ups, došlo je do pogreške")
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
 }

@@ -22,7 +22,6 @@ class ListNewsViewModel {
     var successDownloadTime: Date?
     var listNewsCoordinatorDelegate: ListNewsCoordinatorDelegate?
     var realmService = RealmSerivce()
-    var results: Results<NewsData>!
     
     init(newsService: APIRepository){
         self.newsService = newsService
@@ -30,7 +29,7 @@ class ListNewsViewModel {
     
     //MARK: funkcija koja prati podatke i obrađuje ih za view
     func initializeObservableDataAPI() -> Disposable{
-     
+        
         let combineObserver = downloadTrigger.flatMap { [unowned self] (_) -> Observable<(DataAndErrorWrapper<NewsData>, DataAndErrorWrapper<NewsData>)> in
             self.loaderControll.onNext(true)
             let downloadObserver = self.newsService.observableFetchData()
@@ -38,16 +37,20 @@ class ListNewsViewModel {
             
             let unwrappedDownloadObserver = downloadObserver.map({ (wrapperArticleData) -> DataAndErrorWrapper<NewsData> in
                 let data = wrapperArticleData.map({ (article) -> NewsData in
+                    
                     return NewsData(value: ["title": article.title, "descriptionNews": article.description, "urlToImage": article.urlToImage])
                 })
                 return DataAndErrorWrapper(data: data, error: nil)
             })
+                .catchError({ (error) -> Observable<DataAndErrorWrapper<NewsData>> in
+                    return Observable.just(DataAndErrorWrapper(data: [], error: error.localizedDescription))
+                })
             return Observable.combineLatest(unwrappedDownloadObserver,databaseObserver)
         }
         return combineObserver
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .observeOn(MainScheduler.instance)
-            .map({ (newsData, favouriteData) -> (DataAndErrorWrapper<NewsData>, DataAndErrorWrapper<NewsData>) in
+            .map({ (newsData, favouriteData) -> (DataAndErrorWrapper<NewsData>) in
                 for localData in favouriteData.data{
                     for apiData in newsData.data{
                         if localData.title == apiData.title{
@@ -55,19 +58,19 @@ class ListNewsViewModel {
                         }
                     }
                 }
-                return (newsData, favouriteData)
+                return (newsData)
             })
-            .subscribe(onNext: { [unowned self] (newsData, favouritesData) in
+            .subscribe(onNext: { [unowned self] (newsData) in
                 if newsData.error == nil{
-                self.listNewsData = newsData.data
-                self.dataIsReady.onNext(true)
-                self.loaderControll.onNext(false)
-                self.successDownloadTime = Date()
+                    self.listNewsData = newsData.data
+                    self.dataIsReady.onNext(true)
+                    self.loaderControll.onNext(false)
+                    self.successDownloadTime = Date()
                 }
                 else {
                     self.errorOccured.onNext(true)
                 }
-
+                
             })
     }
     
@@ -95,13 +98,21 @@ class ListNewsViewModel {
     func addOrRemoveDataFromFavourites(selectedNews: Int){
         let savedNews = NewsData(value: listNewsData[selectedNews])
         if savedNews.isNewsFavourite{
-            self.realmService.delete(object: savedNews)
-            listNewsData[selectedNews].isNewsFavourite = false
+            if self.realmService.delete(object: savedNews){
+                listNewsData[selectedNews].isNewsFavourite = false
+            }
+            else{
+                self.errorOccured.onNext(true)
+            }
         }
         else {
-            listNewsData[selectedNews].isNewsFavourite = true
             savedNews.isNewsFavourite = true
-            self.realmService.create(object: savedNews)
+            if self.realmService.create(object: savedNews){
+                listNewsData[selectedNews].isNewsFavourite = true
+            }
+            else {
+                self.errorOccured.onNext(true)
+            }
         }
         self.dataIsReady.onNext(true)
     }
@@ -119,7 +130,7 @@ class ListNewsViewModel {
                 }
             }
         }
-          self.dataIsReady.onNext(true)
+        self.dataIsReady.onNext(true)
     }
 }
 

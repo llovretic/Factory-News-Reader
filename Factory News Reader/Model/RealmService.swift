@@ -14,30 +14,32 @@ class RealmSerivce {
     
     var realm = try! Realm()
     
-    func create<T: NewsData>(object: T) {
+    func create<T: NewsData>(object: T) -> Bool {
         do {
             try realm.write {
                 realm.add(object)
             }
-
-        } catch let error{
-                 Observable.just(DataAndErrorWrapper(data: [], error: error.localizedDescription))
+            
+        } catch {
+            return false
         }
+        return true
     }
     
-    func delete<T: NewsData>(object: T){
+    func delete<T: NewsData>(object: T) -> Bool{
         do{
             try realm.write {
                 realm.delete(realm.objects(NewsData.self).filter("title=%@", object.title!))
             }
-        }catch let error {
-             Observable.just(DataAndErrorWrapper(data: [], error: error.localizedDescription))
+        }catch {
+            return false
         }
+        return true
     }
     
     func favouriteNewsDataObservable() ->(Observable<DataAndErrorWrapper<NewsData>>) {
         var favouriteNews: [NewsData] = []
-         let favouriteNewsData = self.realm.objects(NewsData.self)
+        let favouriteNewsData = self.realm.objects(NewsData.self)
         for item in favouriteNewsData{
             favouriteNews += [item]
         }

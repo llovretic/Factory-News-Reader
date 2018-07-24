@@ -16,6 +16,7 @@ class FavouriteNewsViewModel {
     var favouriteNewsCoordinatorDelegate: ListNewsCoordinatorDelegate?
     var dataIsReady = PublishSubject<Bool>()
     var favouriteNewsTrigger = PublishSubject<Bool>()
+    var errorOccured = PublishSubject<Bool>()
     
     func getFavouriteNewsData() -> Disposable{
         let observerFavouriteTrigger = favouriteNewsTrigger
@@ -26,11 +27,11 @@ class FavouriteNewsViewModel {
                     self.favouriteNewsData.removeAll()
                     let favouriteNews = self.realmService.realm.objects(NewsData.self)
                     for item in favouriteNews{
-                        self.favouriteNewsData += [item]
+                        self.favouriteNewsData += [NewsData(value: ["title": item.title!, "descrtipition": item.descriptionNews!, "urlToImage": item.urlToImage!, "isNewsFavourite": item.isNewsFavourite])]
                     }
                     self.dataIsReady.onNext(true)
                 }
-        })
+            })
         return observerFavouriteTrigger
     }
     
@@ -41,10 +42,14 @@ class FavouriteNewsViewModel {
     }
     
     func removeDataFromFavourites(selectedFavouriteNews: Int){
-        let savedNews = NewsData(value: favouriteNewsData[selectedFavouriteNews])
-        self.realmService.delete(object: savedNews)
-        self.favouriteNewsData.remove(at: selectedFavouriteNews)
-        self.dataIsReady.onNext(true)
+        let savedNews = favouriteNewsData[selectedFavouriteNews]
+        if self.realmService.delete(object: savedNews){
+            self.favouriteNewsData.remove(at: selectedFavouriteNews)
+            self.dataIsReady.onNext(true)
+        }
+        else {
+            self.errorOccured.onNext(true)
+        }
     }
     
 }
